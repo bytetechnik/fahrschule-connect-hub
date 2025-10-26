@@ -229,6 +229,49 @@ export const saveDiscussions = (discussions: Discussion[]) => {
   localStorage.setItem('discussions', JSON.stringify(discussions));
 };
 
+export const getStudents = (): Student[] => {
+  const stored = localStorage.getItem('students');
+  if (stored) {
+    return JSON.parse(stored);
+  }
+  localStorage.setItem('students', JSON.stringify(mockStudents));
+  return mockStudents;
+};
+
+export const saveStudents = (students: Student[]) => {
+  localStorage.setItem('students', JSON.stringify(students));
+};
+
+export const createStudent = (student: Omit<Student, 'id'>): Student => {
+  const students = getStudents();
+  const newStudent: Student = {
+    ...student,
+    id: `student-${Date.now()}`,
+  };
+  students.push(newStudent);
+  saveStudents(students);
+  return newStudent;
+};
+
+export const updateStudent = (id: string, updates: Partial<Student>): Student | null => {
+  const students = getStudents();
+  const index = students.findIndex(s => s.id === id);
+  if (index === -1) return null;
+  
+  students[index] = { ...students[index], ...updates };
+  saveStudents(students);
+  return students[index];
+};
+
+export const deleteStudent = (id: string): boolean => {
+  const students = getStudents();
+  const filtered = students.filter(s => s.id !== id);
+  if (filtered.length === students.length) return false;
+  
+  saveStudents(filtered);
+  return true;
+};
+
 const initialAvailability: TeacherAvailability[] = [
   {
     id: 'avail-1',
