@@ -11,7 +11,8 @@ import {
   CreditCard, 
   LogOut,
   GraduationCap,
-  UserCog
+  UserCog,
+  CalendarDays
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -36,12 +37,14 @@ export const Layout = ({ children }: LayoutProps) => {
           { path: `${baseRoute}/students`, icon: Users, label: t('students') },
           { path: `${baseRoute}/teachers`, icon: UserCog, label: t('teachers') },
           { path: `${baseRoute}/lessons`, icon: BookOpen, label: t('lessons') },
+          { path: `${baseRoute}/calendar`, icon: CalendarDays, label: t('calendar') },
           { path: `${baseRoute}/payments`, icon: CreditCard, label: t('payments') },
         ];
       case 'teacher':
         return [
           { path: `${baseRoute}/dashboard`, icon: LayoutDashboard, label: t('dashboard') },
           { path: `${baseRoute}/students`, icon: Users, label: t('students') },
+          { path: `${baseRoute}/calendar`, icon: CalendarDays, label: t('calendar') },
           { path: `${baseRoute}/appointments`, icon: Calendar, label: t('appointments') },
           { path: `${baseRoute}/payments`, icon: CreditCard, label: t('payments') },
         ];
@@ -49,6 +52,7 @@ export const Layout = ({ children }: LayoutProps) => {
         return [
           { path: `${baseRoute}/dashboard`, icon: LayoutDashboard, label: t('dashboard') },
           { path: `${baseRoute}/lessons`, icon: BookOpen, label: t('lessons') },
+          { path: `${baseRoute}/calendar`, icon: CalendarDays, label: t('calendar') },
           { path: `${baseRoute}/appointments`, icon: Calendar, label: t('appointments') },
           { path: `${baseRoute}/payments`, icon: CreditCard, label: t('payments') },
         ];

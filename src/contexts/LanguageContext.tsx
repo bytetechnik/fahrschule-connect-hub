@@ -35,6 +35,7 @@ const translations: Record<Language, Record<string, string>> = {
     'payments': 'Zahlungen',
     'progress': 'Fortschritt',
     'discussion': 'Diskussion',
+    'calendar': 'Kalender',
     
     // Dashboard
     'welcome': 'Willkommen',
@@ -86,6 +87,20 @@ const translations: Record<Language, Record<string, string>> = {
     'message': 'Nachricht',
     'send': 'Senden',
     'back': 'Zurück',
+    
+    // Calendar
+    'availability': 'Verfügbarkeit',
+    'setAvailability': 'Verfügbarkeit festlegen',
+    'teacherSchedule': 'Fahrlehrerplan',
+    'selectDate': 'Datum auswählen',
+    'selectTime': 'Zeit auswählen',
+    'availableSlots': 'Verfügbare Slots',
+    'book': 'Buchen',
+    'available': 'Verfügbar',
+    'booked': 'Gebucht',
+    'addTimeSlot': 'Zeitslot hinzufügen',
+    'removeSlot': 'Slot entfernen',
+    'saveAvailability': 'Verfügbarkeit speichern',
   },
   en: {
     // Auth
@@ -111,6 +126,7 @@ const translations: Record<Language, Record<string, string>> = {
     'payments': 'Payments',
     'progress': 'Progress',
     'discussion': 'Discussion',
+    'calendar': 'Calendar',
     
     // Dashboard
     'welcome': 'Welcome',
@@ -162,6 +178,20 @@ const translations: Record<Language, Record<string, string>> = {
     'message': 'Message',
     'send': 'Send',
     'back': 'Back',
+    
+    // Calendar
+    'availability': 'Availability',
+    'setAvailability': 'Set Availability',
+    'teacherSchedule': 'Teacher Schedule',
+    'selectDate': 'Select Date',
+    'selectTime': 'Select Time',
+    'availableSlots': 'Available Slots',
+    'book': 'Book',
+    'available': 'Available',
+    'booked': 'Booked',
+    'addTimeSlot': 'Add Time Slot',
+    'removeSlot': 'Remove Slot',
+    'saveAvailability': 'Save Availability',
   }
 };
 
