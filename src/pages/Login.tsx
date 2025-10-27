@@ -55,13 +55,13 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
-      <div className="w-full max-w-md space-y-6">
+      <div className="w-full max-w-md space-y-4 md:space-y-6">
         <div className="text-center space-y-2">
           <div className="flex justify-center mb-4">
-            <img src={logo} alt="ByteTechnik Fahrschule Logo" className="h-16 w-16 object-contain" />
+            <img src={logo} alt="ByteTechnik Fahrschule Logo" className="h-12 w-12 md:h-16 md:w-16 object-contain" />
           </div>
-          <h1 className="text-3xl font-bold text-foreground">ByteTechnik Fahrschule</h1>
-          <p className="text-muted-foreground">Management System</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">ByteTechnik Fahrschule</h1>
+          <p className="text-sm md:text-base text-muted-foreground">Management System</p>
         </div>
 
         <div className="flex justify-center">
@@ -108,18 +108,18 @@ const Login = () => {
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
             <div className="space-y-2">
-              <p className="font-semibold">{t('demoCredentials')}</p>
+              <p className="font-semibold text-sm">{t('demoCredentials')}</p>
               <div className="space-y-1">
                 {demoUsers.map((user, idx) => (
                   <Button
                     key={idx}
                     variant="ghost"
                     size="sm"
-                    className="w-full justify-start text-xs font-mono"
+                    className="w-full justify-start text-xs font-mono break-all h-auto py-2 px-2"
                     onClick={() => quickLogin(user.email, user.password)}
                   >
-                    <span className="font-semibold mr-2">{user.role}:</span>
-                    {user.email} / {user.password}
+                    <span className="font-semibold mr-2 shrink-0">{user.role}:</span>
+                    <span className="text-left">{user.email} / {user.password}</span>
                   </Button>
                 ))}
               </div>
