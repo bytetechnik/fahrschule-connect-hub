@@ -14,6 +14,18 @@ export interface Student {
   status: 'active' | 'expired';
   progress: number;
   licenseClass: string;
+  joiningDate: string;
+}
+
+export interface Product {
+  id: string;
+  name: string;
+  nameEn: string;
+  description: string;
+  descriptionEn: string;
+  type: 'theory-app' | 'driving-lesson' | 'theory-exam' | 'practical-exam';
+  basePriceByYear: { year: string; price: number }[];
+  customPrices?: { studentId: string; price: number }[];
 }
 
 export interface Lesson {
@@ -80,12 +92,67 @@ export const mockTeachers: Teacher[] = [
 ];
 
 export const mockStudents: Student[] = [
-  { id: 'student-1', name: 'Anna Schmidt', email: 'student@fahrschule.de', teacherId: 'teacher-1', validityDate: '2025-12-31', status: 'active', progress: 100, licenseClass: 'B' },
-  { id: 'student-2', name: 'Lucas Weber', email: 'lucas.weber@example.com', teacherId: 'teacher-1', validityDate: '2025-11-30', status: 'active', progress: 50, licenseClass: 'B' },
-  { id: 'student-3', name: 'Emma Meyer', email: 'emma.meyer@example.com', teacherId: 'teacher-2', validityDate: '2026-01-15', status: 'active', progress: 75, licenseClass: 'A2' },
-  { id: 'student-4', name: 'Noah Wagner', email: 'noah.wagner@example.com', teacherId: 'teacher-2', validityDate: '2025-10-20', status: 'active', progress: 25, licenseClass: 'BE' },
-  { id: 'student-5', name: 'Mia Fischer', email: 'mia.fischer@example.com', teacherId: 'teacher-3', validityDate: '2025-12-15', status: 'active', progress: 60, licenseClass: 'A' },
-  { id: 'student-6', name: 'Leon Becker', email: 'leon.becker@example.com', teacherId: 'teacher-3', validityDate: '2025-09-30', status: 'active', progress: 40, licenseClass: 'C1' }
+  { id: 'student-1', name: 'Anna Schmidt', email: 'student@fahrschule.de', teacherId: 'teacher-1', validityDate: '2025-12-31', status: 'active', progress: 100, licenseClass: 'B', joiningDate: '2023-01-15' },
+  { id: 'student-2', name: 'Lucas Weber', email: 'lucas.weber@example.com', teacherId: 'teacher-1', validityDate: '2025-11-30', status: 'active', progress: 50, licenseClass: 'B', joiningDate: '2024-03-20' },
+  { id: 'student-3', name: 'Emma Meyer', email: 'emma.meyer@example.com', teacherId: 'teacher-2', validityDate: '2026-01-15', status: 'active', progress: 75, licenseClass: 'A2', joiningDate: '2024-06-10' },
+  { id: 'student-4', name: 'Noah Wagner', email: 'noah.wagner@example.com', teacherId: 'teacher-2', validityDate: '2025-10-20', status: 'active', progress: 25, licenseClass: 'BE', joiningDate: '2025-01-05' },
+  { id: 'student-5', name: 'Mia Fischer', email: 'mia.fischer@example.com', teacherId: 'teacher-3', validityDate: '2025-12-15', status: 'active', progress: 60, licenseClass: 'A', joiningDate: '2024-09-12' },
+  { id: 'student-6', name: 'Leon Becker', email: 'leon.becker@example.com', teacherId: 'teacher-3', validityDate: '2025-09-30', status: 'active', progress: 40, licenseClass: 'C1', joiningDate: '2025-02-18' }
+];
+
+const mockProducts: Product[] = [
+  {
+    id: 'product-1',
+    name: 'Theorie App',
+    nameEn: 'Theory App',
+    description: 'Zugang zur Theorie-Lern-App',
+    descriptionEn: 'Access to theory learning app',
+    type: 'theory-app',
+    basePriceByYear: [
+      { year: '2023', price: 45 },
+      { year: '2024', price: 50 },
+      { year: '2025', price: 55 }
+    ]
+  },
+  {
+    id: 'product-2',
+    name: 'Fahrstunde (45 Min)',
+    nameEn: 'Driving Lesson (45 min)',
+    description: 'Eine praktische Fahrstunde (45 Minuten)',
+    descriptionEn: 'One practical driving lesson (45 minutes)',
+    type: 'driving-lesson',
+    basePriceByYear: [
+      { year: '2023', price: 60 },
+      { year: '2024', price: 65 },
+      { year: '2025', price: 70 }
+    ]
+  },
+  {
+    id: 'product-3',
+    name: 'Theorieprüfung',
+    nameEn: 'Theory Exam',
+    description: 'Anmeldung zur theoretischen Prüfung',
+    descriptionEn: 'Registration for theory exam',
+    type: 'theory-exam',
+    basePriceByYear: [
+      { year: '2023', price: 30 },
+      { year: '2024', price: 35 },
+      { year: '2025', price: 40 }
+    ]
+  },
+  {
+    id: 'product-4',
+    name: 'Praktische Prüfung',
+    nameEn: 'Practical Exam',
+    description: 'Anmeldung zur praktischen Prüfung',
+    descriptionEn: 'Registration for practical exam',
+    type: 'practical-exam',
+    basePriceByYear: [
+      { year: '2023', price: 150 },
+      { year: '2024', price: 160 },
+      { year: '2025', price: 170 }
+    ]
+  }
 ];
 
 export const mockLessons: Lesson[] = [
@@ -773,4 +840,70 @@ export const getAvailability = (): TeacherAvailability[] => {
 
 export const saveAvailability = (availability: TeacherAvailability[]) => {
   localStorage.setItem('availability', JSON.stringify(availability));
+};
+
+// Product management functions
+export const getProducts = (): Product[] => {
+  const stored = localStorage.getItem('products');
+  if (stored) {
+    return JSON.parse(stored);
+  }
+  localStorage.setItem('products', JSON.stringify(mockProducts));
+  return mockProducts;
+};
+
+export const saveProducts = (products: Product[]) => {
+  localStorage.setItem('products', JSON.stringify(products));
+};
+
+export const createProduct = (data: Omit<Product, 'id'>): Product => {
+  const products = getProducts();
+  const newProduct = {
+    ...data,
+    id: `product-${Date.now()}`
+  };
+  products.push(newProduct);
+  saveProducts(products);
+  return newProduct;
+};
+
+export const updateProduct = (id: string, updates: Partial<Product>): Product | null => {
+  const products = getProducts();
+  const index = products.findIndex(p => p.id === id);
+  if (index === -1) return null;
+  
+  products[index] = { ...products[index], ...updates };
+  saveProducts(products);
+  return products[index];
+};
+
+export const deleteProduct = (id: string): boolean => {
+  const products = getProducts();
+  const filtered = products.filter(p => p.id !== id);
+  if (filtered.length === products.length) return false;
+  
+  saveProducts(filtered);
+  return true;
+};
+
+export const getProductPriceForStudent = (product: Product, student: Student): number => {
+  // Check for custom price first
+  if (product.customPrices) {
+    const customPrice = product.customPrices.find(cp => cp.studentId === student.id);
+    if (customPrice) return customPrice.price;
+  }
+  
+  // Get price based on joining year
+  const joiningYear = new Date(student.joiningDate).getFullYear().toString();
+  const priceEntry = product.basePriceByYear.find(p => p.year === joiningYear);
+  
+  // Return the year-specific price or the latest price
+  if (priceEntry) return priceEntry.price;
+  
+  // Fallback to latest year price
+  const latestPrice = product.basePriceByYear.sort((a, b) => 
+    parseInt(b.year) - parseInt(a.year)
+  )[0];
+  
+  return latestPrice?.price || 0;
 };

@@ -36,6 +36,8 @@ const translations: Record<Language, Record<string, string>> = {
     'progress': 'Fortschritt',
     'discussion': 'Diskussion',
     'calendar': 'Kalender',
+    'shop': 'Shop',
+    'success': 'Erfolg',
     
     // Dashboard
     'welcome': 'Willkommen',
@@ -127,6 +129,8 @@ const translations: Record<Language, Record<string, string>> = {
     'progress': 'Progress',
     'discussion': 'Discussion',
     'calendar': 'Calendar',
+    'shop': 'Shop',
+    'success': 'Success',
     
     // Dashboard
     'welcome': 'Welcome',

@@ -28,7 +28,8 @@ const AdminStudents = () => {
     validityDate: '',
     status: 'active' as 'active' | 'expired',
     progress: 0,
-    licenseClass: ''
+    licenseClass: '',
+    joiningDate: ''
   });
 
   const resetForm = () => {
@@ -39,7 +40,8 @@ const AdminStudents = () => {
       validityDate: '',
       status: 'active',
       progress: 0,
-      licenseClass: ''
+      licenseClass: '',
+      joiningDate: ''
     });
     setEditingStudent(null);
   };
@@ -54,7 +56,8 @@ const AdminStudents = () => {
         validityDate: student.validityDate,
         status: student.status,
         progress: student.progress,
-        licenseClass: student.licenseClass
+        licenseClass: student.licenseClass,
+        joiningDate: student.joiningDate
       });
     } else {
       resetForm();
@@ -65,7 +68,7 @@ const AdminStudents = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.email || !formData.teacherId || !formData.validityDate || !formData.licenseClass) {
+    if (!formData.name || !formData.email || !formData.teacherId || !formData.validityDate || !formData.licenseClass || !formData.joiningDate) {
       toast({
         title: "Error",
         description: "Please fill in all required fields",
@@ -184,6 +187,16 @@ const AdminStudents = () => {
                       ))}
                     </SelectContent>
                   </Select>
+                </div>
+                <div>
+                  <Label htmlFor="joiningDate">Joining Date *</Label>
+                  <Input
+                    id="joiningDate"
+                    type="date"
+                    value={formData.joiningDate}
+                    onChange={(e) => setFormData({ ...formData, joiningDate: e.target.value })}
+                    required
+                  />
                 </div>
                 <div>
                   <Label htmlFor="validityDate">Validity Date *</Label>

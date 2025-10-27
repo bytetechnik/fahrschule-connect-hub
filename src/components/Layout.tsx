@@ -12,7 +12,8 @@ import {
   LogOut,
   GraduationCap,
   UserCog,
-  CalendarDays
+  CalendarDays,
+  ShoppingBag
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -39,6 +40,7 @@ export const Layout = ({ children }: LayoutProps) => {
           { path: `${baseRoute}/lessons`, icon: BookOpen, label: t('lessons') },
           { path: `${baseRoute}/calendar`, icon: CalendarDays, label: t('calendar') },
           { path: `${baseRoute}/payments`, icon: CreditCard, label: t('payments') },
+          { path: `${baseRoute}/shop`, icon: ShoppingBag, label: t('shop') },
         ];
       case 'teacher':
         return [
@@ -55,6 +57,7 @@ export const Layout = ({ children }: LayoutProps) => {
           { path: `${baseRoute}/calendar`, icon: CalendarDays, label: t('calendar') },
           { path: `${baseRoute}/appointments`, icon: Calendar, label: t('appointments') },
           { path: `${baseRoute}/payments`, icon: CreditCard, label: t('payments') },
+          { path: `${baseRoute}/shop`, icon: ShoppingBag, label: t('shop') },
         ];
       default:
         return [];
