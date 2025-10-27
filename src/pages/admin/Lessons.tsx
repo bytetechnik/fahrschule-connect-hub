@@ -171,85 +171,48 @@ const AdminLessons = () => {
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {lessons.map((lesson) => (
-            <Card key={lesson.id}>
+            <Card key={lesson.id} className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate(`/admin/lessons/${lesson.id}`)}>
               <CardHeader>
-                <div className="flex justify-between items-start">
-                  <div className="flex-1 cursor-pointer" onClick={() => navigate(`/admin/lessons/${lesson.id}`)}>
-                    <CardTitle className="hover:text-primary transition-colors">{language === 'de' ? lesson.title : lesson.titleEn}</CardTitle>
+                <div className="flex justify-between items-start gap-2">
+                  <div className="flex-1">
+                    <CardTitle className="text-lg">{language === 'de' ? lesson.title : lesson.titleEn}</CardTitle>
                     <CardDescription className="line-clamp-2">
                       {language === 'de' ? lesson.description : lesson.descriptionEn}
                     </CardDescription>
                   </div>
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="icon" onClick={() => navigate(`/admin/lessons/${lesson.id}`)}>
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                    <Button variant="outline" size="icon" onClick={() => handleEdit(lesson)}>
-                      <Pencil className="h-4 w-4" />
-                    </Button>
-                    <Button variant="outline" size="icon" onClick={() => handleDelete(lesson.id)}>
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-3">
                 <img 
                   src={lesson.thumbnail} 
                   alt={language === 'de' ? lesson.title : lesson.titleEn}
-                  className="w-full h-40 object-cover rounded-md cursor-pointer"
-                  onClick={() => navigate(`/admin/lessons/${lesson.id}`)}
+                  className="w-full h-40 object-cover rounded-md"
                 />
-                
-                {lesson.videos && lesson.videos.length > 0 && (
-                  <div className="space-y-2">
-                    <h4 className="text-sm font-semibold flex items-center gap-2">
-                      <Video className="h-4 w-4" />
-                      Videos
-                    </h4>
-                    {lesson.videos.map((video, idx) => {
-                      const videoId = extractYouTubeId(video.url);
-                      return (
-                        <div key={idx} className="space-y-2">
-                          <p className="text-sm">{video.title}</p>
-                          {videoId && (
-                            <iframe
-                              width="100%"
-                              height="200"
-                              src={`https://www.youtube.com/embed/${videoId}`}
-                              title={video.title}
-                              frameBorder="0"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                              allowFullScreen
-                              className="rounded-md"
-                            />
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-
-                {lesson.documents && lesson.documents.length > 0 && (
-                  <div className="space-y-2">
-                    <h4 className="text-sm font-semibold flex items-center gap-2">
-                      <FileText className="h-4 w-4" />
-                      Documents
-                    </h4>
-                    {lesson.documents.map((doc, idx) => (
-                      <a
-                        key={idx}
-                        href={doc.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-sm text-primary hover:underline"
-                      >
-                        <FileText className="h-4 w-4" />
-                        {doc.name}
-                      </a>
-                    ))}
-                  </div>
-                )}
+                <div className="flex gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="flex-1"
+                    onClick={(e) => { e.stopPropagation(); navigate(`/admin/lessons/${lesson.id}`); }}
+                  >
+                    <Eye className="mr-2 h-4 w-4" />
+                    View
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={(e) => { e.stopPropagation(); handleEdit(lesson); }}
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={(e) => { e.stopPropagation(); handleDelete(lesson.id); }}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           ))}
