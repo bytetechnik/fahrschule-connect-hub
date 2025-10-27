@@ -158,12 +158,12 @@ const AdminLessons = () => {
   return (
     <Layout>
       <div className="space-y-6">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">{t('recordedLessons')}</h1>
-            <p className="text-muted-foreground">Manage theory lesson content</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t('recordedLessons')}</h1>
+            <p className="text-sm md:text-base text-muted-foreground">Manage theory lesson content</p>
           </div>
-          <Button onClick={handleAdd}>
+          <Button onClick={handleAdd} className="w-full sm:w-auto">
             <Plus className="mr-2 h-4 w-4" />
             Add Lesson
           </Button>
@@ -174,9 +174,9 @@ const AdminLessons = () => {
             <Card key={lesson.id} className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate(`/admin/lessons/${lesson.id}`)}>
               <CardHeader>
                 <div className="flex justify-between items-start gap-2">
-                  <div className="flex-1">
-                    <CardTitle className="text-lg">{language === 'de' ? lesson.title : lesson.titleEn}</CardTitle>
-                    <CardDescription className="line-clamp-2">
+                  <div className="flex-1 min-w-0">
+                    <CardTitle className="text-base md:text-lg truncate">{language === 'de' ? lesson.title : lesson.titleEn}</CardTitle>
+                    <CardDescription className="line-clamp-2 text-sm">
                       {language === 'de' ? lesson.description : lesson.descriptionEn}
                     </CardDescription>
                   </div>
@@ -186,17 +186,17 @@ const AdminLessons = () => {
                 <img 
                   src={lesson.thumbnail} 
                   alt={language === 'de' ? lesson.title : lesson.titleEn}
-                  className="w-full h-40 object-cover rounded-md"
+                  className="w-full h-32 md:h-40 object-cover rounded-md"
                 />
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="flex-1"
+                    className="flex-1 min-w-[100px]"
                     onClick={(e) => { e.stopPropagation(); navigate(`/admin/lessons/${lesson.id}`); }}
                   >
-                    <Eye className="mr-2 h-4 w-4" />
-                    View
+                    <Eye className="mr-1 md:mr-2 h-4 w-4" />
+                    <span className="hidden sm:inline">View</span>
                   </Button>
                   <Button 
                     variant="outline" 

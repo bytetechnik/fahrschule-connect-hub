@@ -22,8 +22,8 @@ const StudentDashboard = () => {
     <Layout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">{t('dashboard')}</h1>
-          <p className="text-muted-foreground">{t('welcome')}, {user?.name}</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t('dashboard')}</h1>
+          <p className="text-sm md:text-base text-muted-foreground">{t('welcome')}, {user?.name}</p>
         </div>
 
         {user?.validityDate && (
