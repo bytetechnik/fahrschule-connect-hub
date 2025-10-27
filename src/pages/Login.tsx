@@ -6,8 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { LanguageToggle } from '@/components/LanguageToggle';
-import { GraduationCap, AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import logo from '@/assets/bt_logo.png';
 import { useToast } from '@/hooks/use-toast';
 
 const Login = () => {
@@ -57,7 +58,7 @@ const Login = () => {
       <div className="w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
           <div className="flex justify-center mb-4">
-            <GraduationCap className="h-16 w-16" style={{ color: '#A91D4D' }} />
+            <img src={logo} alt="ByteTechnik Fahrschule Logo" className="h-16 w-16 object-contain" />
           </div>
           <h1 className="text-3xl font-bold text-foreground">ByteTechnik Fahrschule</h1>
           <p className="text-muted-foreground">Management System</p>
