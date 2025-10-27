@@ -144,14 +144,14 @@ const AdminShop = () => {
   return (
     <Layout>
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">{t('shop')}</h1>
-            <p className="text-muted-foreground">Manage shop products and pricing</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t('shop')}</h1>
+            <p className="text-sm md:text-base text-muted-foreground">Manage shop products and pricing</p>
           </div>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button onClick={() => handleOpenDialog()}>
+              <Button onClick={() => handleOpenDialog()} className="w-full sm:w-auto">
                 <Plus className="mr-2 h-4 w-4" />
                 Add Product
               </Button>
@@ -297,12 +297,12 @@ const AdminShop = () => {
           {products.map((product) => (
             <Card key={product.id}>
               <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <CardTitle className="text-lg">{product.name}</CardTitle>
-                    <p className="text-sm text-muted-foreground mt-1">{product.description}</p>
+                <div className="flex flex-col sm:flex-row items-start justify-between gap-3">
+                  <div className="flex-1 min-w-0">
+                    <CardTitle className="text-base md:text-lg truncate">{product.name}</CardTitle>
+                    <p className="text-sm text-muted-foreground mt-1 truncate">{product.description}</p>
                   </div>
-                  <div className="flex gap-1">
+                  <div className="flex gap-1 shrink-0">
                     <Button size="icon" variant="ghost" onClick={() => handleOpenDialog(product)}>
                       <Pencil className="h-4 w-4" />
                     </Button>

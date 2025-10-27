@@ -103,14 +103,14 @@ const AdminTeachers = () => {
   return (
     <Layout>
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">{t('teachers')}</h1>
-            <p className="text-muted-foreground">Manage driving instructors</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t('teachers')}</h1>
+            <p className="text-sm md:text-base text-muted-foreground">Manage driving instructors</p>
           </div>
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <DialogTrigger asChild>
-              <Button onClick={() => setFormData({ name: '', email: '', status: 'active' })}>
+              <Button onClick={() => setFormData({ name: '', email: '', status: 'active' })} className="w-full sm:w-auto">
                 <Plus className="mr-2 h-4 w-4" />
                 Add Teacher
               </Button>
@@ -169,12 +169,12 @@ const AdminTeachers = () => {
             return (
               <Card key={teacher.id}>
                 <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle>{teacher.name}</CardTitle>
-                      <p className="text-sm text-muted-foreground">{teacher.email}</p>
+                  <div className="flex flex-col sm:flex-row items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <CardTitle className="truncate">{teacher.name}</CardTitle>
+                      <p className="text-sm text-muted-foreground truncate">{teacher.email}</p>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 shrink-0">
                       <Badge variant={teacher.status === 'active' ? 'default' : 'secondary'}>
                         {teacher.status}
                       </Badge>
@@ -192,11 +192,11 @@ const AdminTeachers = () => {
                     <div>
                       <p className="text-sm text-muted-foreground">{t('assignedStudents')}: {assignedStudents.length}</p>
                     </div>
-                    <div className="space-y-1">
+                    <div className="space-y-1 max-h-48 overflow-y-auto">
                       {assignedStudents.map((student) => (
-                        <div key={student.id} className="flex items-center justify-between text-sm">
-                          <span>{student.name}</span>
-                          <span className="text-muted-foreground">{student.progress}%</span>
+                        <div key={student.id} className="flex items-center justify-between text-sm gap-2">
+                          <span className="truncate flex-1">{student.name}</span>
+                          <span className="text-muted-foreground shrink-0">{student.progress}%</span>
                         </div>
                       ))}
                     </div>

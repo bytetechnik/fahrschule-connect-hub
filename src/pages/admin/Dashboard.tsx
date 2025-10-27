@@ -38,8 +38,8 @@ const AdminDashboard = () => {
     <Layout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">{t('dashboard')}</h1>
-          <p className="text-muted-foreground">{t('welcome')}, Administrator</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t('dashboard')}</h1>
+          <p className="text-sm md:text-base text-muted-foreground">{t('welcome')}, Administrator</p>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -67,12 +67,12 @@ const AdminDashboard = () => {
             <CardContent>
               <div className="space-y-2">
                 {mockStudents.slice(0, 5).map((student) => (
-                  <div key={student.id} className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">{student.name}</p>
-                      <p className="text-sm text-muted-foreground">{student.email}</p>
+                  <div key={student.id} className="flex items-center justify-between gap-2">
+                    <div className="min-w-0 flex-1">
+                      <p className="font-medium truncate">{student.name}</p>
+                      <p className="text-sm text-muted-foreground truncate">{student.email}</p>
                     </div>
-                    <div className="text-right">
+                    <div className="text-right shrink-0">
                       <p className="text-sm font-medium">{student.progress}%</p>
                       <p className="text-xs text-muted-foreground">{t('progress')}</p>
                     </div>
@@ -91,12 +91,12 @@ const AdminDashboard = () => {
                 {mockTeachers.map((teacher) => {
                   const assignedCount = mockStudents.filter(s => s.teacherId === teacher.id).length;
                   return (
-                    <div key={teacher.id} className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium">{teacher.name}</p>
-                        <p className="text-sm text-muted-foreground">{teacher.email}</p>
+                    <div key={teacher.id} className="flex items-center justify-between gap-2">
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium truncate">{teacher.name}</p>
+                        <p className="text-sm text-muted-foreground truncate">{teacher.email}</p>
                       </div>
-                      <div className="text-right">
+                      <div className="text-right shrink-0">
                         <p className="text-sm font-medium">{assignedCount}</p>
                         <p className="text-xs text-muted-foreground">{t('assignedStudents')}</p>
                       </div>

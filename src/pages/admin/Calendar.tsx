@@ -20,16 +20,16 @@ const AdminCalendar = () => {
     <Layout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">{t('calendar')}</h1>
-          <p className="text-muted-foreground">View all teacher schedules and bookings</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t('calendar')}</h1>
+          <p className="text-sm md:text-base text-muted-foreground">View all teacher schedules and bookings</p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 lg:grid-cols-2">
           <Card>
             <CardHeader>
               <CardTitle>{t('selectDate')}</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex justify-center">
               <CalendarComponent
                 mode="single"
                 selected={date}
@@ -49,11 +49,11 @@ const AdminCalendar = () => {
                 <p className="text-muted-foreground">No availability set for this date</p>
               ) : (
                 <Tabs defaultValue={dayAvailabilities[0]?.teacherId} className="w-full">
-                  <TabsList className="w-full">
+                  <TabsList className="w-full flex-wrap h-auto gap-1">
                     {dayAvailabilities.map((avail) => {
                       const teacher = mockTeachers.find(t => t.id === avail.teacherId);
                       return (
-                        <TabsTrigger key={avail.teacherId} value={avail.teacherId} className="flex-1">
+                        <TabsTrigger key={avail.teacherId} value={avail.teacherId} className="flex-1 min-w-[100px]">
                           {teacher?.name}
                         </TabsTrigger>
                       );
@@ -67,8 +67,8 @@ const AdminCalendar = () => {
                         {avail.timeSlots.map((slot) => {
                           const student = slot.bookedBy ? mockStudents.find(s => s.id === slot.bookedBy) : null;
                           return (
-                            <div key={slot.time} className="flex items-center justify-between p-3 border rounded-lg">
-                              <div className="flex items-center gap-3">
+                            <div key={slot.time} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 border rounded-lg gap-2">
+                              <div className="flex items-center gap-3 flex-wrap">
                                 <span className="font-medium">{slot.time}</span>
                                 {slot.available ? (
                                   <Badge variant="default">{t('available')}</Badge>
@@ -76,7 +76,7 @@ const AdminCalendar = () => {
                                   <div className="flex items-center gap-2">
                                     <Badge variant="secondary">{t('booked')}</Badge>
                                     {student && (
-                                      <span className="text-sm text-muted-foreground">{student.name}</span>
+                                      <span className="text-sm text-muted-foreground truncate">{student.name}</span>
                                     )}
                                   </div>
                                 )}
@@ -108,12 +108,12 @@ const AdminCalendar = () => {
                 );
                 
                 return (
-                  <div key={teacher.id} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div>
-                      <p className="font-medium">{teacher.name}</p>
-                      <p className="text-sm text-muted-foreground">{teacher.email}</p>
+                  <div key={teacher.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 border rounded-lg gap-3">
+                    <div className="min-w-0 flex-1">
+                      <p className="font-medium truncate">{teacher.name}</p>
+                      <p className="text-sm text-muted-foreground truncate">{teacher.email}</p>
                     </div>
-                    <div className="text-right">
+                    <div className="text-left sm:text-right shrink-0">
                       <p className="text-sm">
                         <span className="font-medium">{bookedSlots}</span> / {totalSlots} slots booked
                       </p>

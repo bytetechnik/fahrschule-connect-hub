@@ -15,12 +15,12 @@ const AdminPayments = () => {
   return (
     <Layout>
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">{t('payments')}</h1>
-            <p className="text-muted-foreground">View and export payment records</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t('payments')}</h1>
+            <p className="text-sm md:text-base text-muted-foreground">View and export payment records</p>
           </div>
-          <Button className="gap-2">
+          <Button className="gap-2 w-full sm:w-auto">
             <Download className="h-4 w-4" />
             {t('exportReport')}
           </Button>
@@ -41,14 +41,14 @@ const AdminPayments = () => {
             return (
               <Card key={payment.id}>
                 <CardContent className="pt-6">
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-1">
-                      <p className="font-medium">{student?.name}</p>
-                      <p className="text-sm text-muted-foreground">{payment.description}</p>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div className="space-y-1 min-w-0 flex-1">
+                      <p className="font-medium truncate">{student?.name}</p>
+                      <p className="text-sm text-muted-foreground truncate">{payment.description}</p>
                       <p className="text-xs text-muted-foreground">{payment.date}</p>
                     </div>
-                    <div className="text-right space-y-2">
-                      <p className="text-2xl font-bold">€{payment.amount}</p>
+                    <div className="text-left sm:text-right space-y-2 shrink-0">
+                      <p className="text-xl md:text-2xl font-bold">€{payment.amount}</p>
                       <Badge variant={payment.status === 'paid' ? 'default' : 'secondary'}>
                         {payment.status}
                       </Badge>

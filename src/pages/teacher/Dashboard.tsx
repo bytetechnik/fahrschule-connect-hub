@@ -42,8 +42,8 @@ const TeacherDashboard = () => {
     <Layout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">{t('dashboard')}</h1>
-          <p className="text-muted-foreground">{t('welcome')}, {user?.name}</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t('dashboard')}</h1>
+          <p className="text-sm md:text-base text-muted-foreground">{t('welcome')}, {user?.name}</p>
         </div>
 
         <div className="grid gap-4 md:grid-cols-3">
@@ -75,12 +75,12 @@ const TeacherDashboard = () => {
                 ).length;
                 
                 return (
-                  <div key={student.id} className="flex items-center justify-between p-3 border rounded-lg">
-                    <div>
-                      <p className="font-medium">{student.name}</p>
-                      <p className="text-sm text-muted-foreground">{student.email}</p>
+                  <div key={student.id} className="flex items-center justify-between p-3 border rounded-lg gap-2">
+                    <div className="min-w-0 flex-1">
+                      <p className="font-medium truncate">{student.name}</p>
+                      <p className="text-sm text-muted-foreground truncate">{student.email}</p>
                     </div>
-                    <div className="text-right">
+                    <div className="text-right shrink-0">
                       <p className="text-sm font-medium">{student.progress}%</p>
                       <p className="text-xs text-muted-foreground">{completedLessons} lessons</p>
                     </div>

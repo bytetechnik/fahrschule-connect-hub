@@ -111,19 +111,19 @@ const AdminStudents = () => {
   return (
     <Layout>
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">{t('students')}</h1>
-            <p className="text-muted-foreground">Manage and monitor student accounts</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t('students')}</h1>
+            <p className="text-sm md:text-base text-muted-foreground">Manage and monitor student accounts</p>
           </div>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button onClick={() => handleOpenDialog()}>
+              <Button onClick={() => handleOpenDialog()} className="w-full sm:w-auto">
                 <Plus className="mr-2 h-4 w-4" />
                 Add Student
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>{editingStudent ? 'Edit Student' : 'Add New Student'}</DialogTitle>
               </DialogHeader>
@@ -254,12 +254,12 @@ const AdminStudents = () => {
             return (
               <Card key={student.id}>
                 <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle>{student.name}</CardTitle>
-                      <p className="text-sm text-muted-foreground">{student.email}</p>
+                  <div className="flex flex-col sm:flex-row items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <CardTitle className="truncate">{student.name}</CardTitle>
+                      <p className="text-sm text-muted-foreground truncate">{student.email}</p>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 shrink-0">
                       <Badge variant={student.status === 'active' ? 'default' : 'destructive'}>
                         {student.status}
                       </Badge>
@@ -273,26 +273,26 @@ const AdminStudents = () => {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
                     <div>
-                      <p className="text-sm text-muted-foreground">License Class</p>
-                      <p className="font-medium">{student.licenseClass}</p>
+                      <p className="text-xs md:text-sm text-muted-foreground">License Class</p>
+                      <p className="text-sm md:text-base font-medium truncate">{student.licenseClass}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground">{t('teacher')}</p>
-                      <p className="font-medium">{teacher?.name}</p>
+                      <p className="text-xs md:text-sm text-muted-foreground">{t('teacher')}</p>
+                      <p className="text-sm md:text-base font-medium truncate">{teacher?.name}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground">{t('completedLessons')}</p>
-                      <p className="font-medium">{completedLessons} / {mockLessons.length}</p>
+                      <p className="text-xs md:text-sm text-muted-foreground">{t('completedLessons')}</p>
+                      <p className="text-sm md:text-base font-medium">{completedLessons} / {mockLessons.length}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground">{t('progress')}</p>
-                      <p className="font-medium">{student.progress}%</p>
+                      <p className="text-xs md:text-sm text-muted-foreground">{t('progress')}</p>
+                      <p className="text-sm md:text-base font-medium">{student.progress}%</p>
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground">{t('accountValidity')}</p>
-                      <p className="font-medium">{student.validityDate}</p>
+                      <p className="text-xs md:text-sm text-muted-foreground">{t('accountValidity')}</p>
+                      <p className="text-sm md:text-base font-medium truncate">{student.validityDate}</p>
                     </div>
                   </div>
                 </CardContent>
