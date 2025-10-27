@@ -10,12 +10,12 @@ import {
   Calendar, 
   CreditCard, 
   LogOut,
-  GraduationCap,
   UserCog,
   CalendarDays,
   ShoppingBag
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import logo from '@/assets/bt_logo.png';
 
 interface LayoutProps {
   children: ReactNode;
@@ -72,7 +72,7 @@ export const Layout = ({ children }: LayoutProps) => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <GraduationCap className="h-8 w-8" style={{ color: '#A91D4D' }} />
+              <img src={logo} alt="ByteTechnik Fahrschule Logo" className="h-10 w-10 object-contain" />
               <div>
                 <h1 className="text-2xl font-bold text-foreground">ByteTechnik Fahrschule</h1>
                 <p className="text-sm text-muted-foreground">{user.name} - {t(user.role)}</p>
