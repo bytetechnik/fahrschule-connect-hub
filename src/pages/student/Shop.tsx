@@ -4,7 +4,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ShoppingCart, Euro } from 'lucide-react';
+import { ShoppingCart, Euro, Plus, Minus } from 'lucide-react';
 import { getProducts, getStudents, getProductPriceForStudent, getPayments, savePayments, Payment } from '@/lib/mockData';
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
@@ -17,6 +17,15 @@ const StudentShop = () => {
   const students = getStudents();
   const currentStudent = students.find(s => s.id === user?.id);
   const [purchasing, setPurchasing] = useState<string | null>(null);
+  const [quantities, setQuantities] = useState<Record<string, number>>({});
+
+  const getQuantity = (productId: string) => quantities[productId] || 1;
+
+  const updateQuantity = (productId: string, delta: number) => {
+    const current = getQuantity(productId);
+    const newQuantity = Math.max(1, current + delta);
+    setQuantities({ ...quantities, [productId]: newQuantity });
+  };
 
   const handlePurchase = (productId: string) => {
     if (!currentStudent) return;
@@ -25,17 +34,22 @@ const StudentShop = () => {
     const product = products.find(p => p.id === productId);
     if (!product) return;
 
-    const price = getProductPriceForStudent(product, currentStudent);
+    const unitPrice = getProductPriceForStudent(product, currentStudent);
+    const quantity = getQuantity(productId);
+    const totalPrice = unitPrice * quantity;
     
     // Create payment record
     const payments = getPayments();
+    const productName = language === 'de' ? product.name : product.nameEn;
+    const description = quantity > 1 ? `${productName} (x${quantity})` : productName;
+    
     const newPayment: Payment = {
       id: `payment-${Date.now()}`,
       studentId: currentStudent.id,
-      amount: price,
+      amount: totalPrice,
       date: new Date().toISOString().split('T')[0],
       status: 'pending',
-      description: language === 'de' ? product.name : product.nameEn
+      description: description
     };
     
     payments.push(newPayment);
@@ -43,9 +57,11 @@ const StudentShop = () => {
 
     toast({
       title: t('success'),
-      description: `Purchase request submitted for ${language === 'de' ? product.name : product.nameEn}. Total: €${price}`
+      description: `Purchase request submitted for ${description}. Total: €${totalPrice}`
     });
 
+    // Reset quantity after purchase
+    setQuantities({ ...quantities, [productId]: 1 });
     setTimeout(() => setPurchasing(null), 1000);
   };
 
@@ -84,8 +100,11 @@ const StudentShop = () => {
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => {
-            const price = getProductPriceForStudent(product, currentStudent);
+            const unitPrice = getProductPriceForStudent(product, currentStudent);
             const hasCustomPrice = product.customPrices?.some(cp => cp.studentId === currentStudent.id);
+            const isDrivingLesson = product.type === 'driving-lesson';
+            const quantity = getQuantity(product.id);
+            const totalPrice = unitPrice * quantity;
 
             return (
               <Card key={product.id} className="flex flex-col">
@@ -104,12 +123,56 @@ const StudentShop = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 flex flex-col justify-end space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-baseline gap-1">
-                      <Euro className="h-5 w-5 text-primary" />
-                      <span className="text-3xl font-bold">{price}</span>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-muted-foreground">
+                        {language === 'de' ? 'Preis pro Einheit' : 'Price per unit'}
+                      </span>
+                      <div className="flex items-baseline gap-1">
+                        <Euro className="h-4 w-4 text-primary" />
+                        <span className="font-medium">{unitPrice}</span>
+                      </div>
+                    </div>
+                    
+                    {isDrivingLesson && (
+                      <div className="flex items-center justify-between py-2">
+                        <span className="text-sm font-medium">
+                          {language === 'de' ? 'Anzahl' : 'Quantity'}
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <Button
+                            size="icon"
+                            variant="outline"
+                            className="h-8 w-8"
+                            onClick={() => updateQuantity(product.id, -1)}
+                            disabled={quantity <= 1}
+                          >
+                            <Minus className="h-4 w-4" />
+                          </Button>
+                          <span className="w-12 text-center font-bold">{quantity}</span>
+                          <Button
+                            size="icon"
+                            variant="outline"
+                            className="h-8 w-8"
+                            onClick={() => updateQuantity(product.id, 1)}
+                          >
+                            <Plus className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                    
+                    <div className="flex items-center justify-between pt-2 border-t">
+                      <span className="text-sm font-medium">
+                        {language === 'de' ? 'Gesamt' : 'Total'}
+                      </span>
+                      <div className="flex items-baseline gap-1">
+                        <Euro className="h-5 w-5 text-primary" />
+                        <span className="text-2xl font-bold">{totalPrice}</span>
+                      </div>
                     </div>
                   </div>
+                  
                   <Button 
                     className="w-full" 
                     onClick={() => handlePurchase(product.id)}
