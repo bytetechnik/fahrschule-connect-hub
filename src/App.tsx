@@ -20,6 +20,7 @@ import TeacherAppointments from "./pages/teacher/Appointments";
 import TeacherPayments from "./pages/teacher/Payments";
 import StudentDashboard from "./pages/student/Dashboard";
 import StudentLessons from "./pages/student/Lessons";
+import StudentLessonDetail from "./pages/student/LessonDetail";
 import StudentCalendar from "./pages/student/Calendar";
 import StudentAppointments from "./pages/student/Appointments";
 import StudentPayments from "./pages/student/Payments";
@@ -54,6 +55,7 @@ const App = () => (
               
               <Route path="/student/dashboard" element={<ProtectedRoute allowedRoles={['student']}><StudentDashboard /></ProtectedRoute>} />
               <Route path="/student/lessons" element={<ProtectedRoute allowedRoles={['student']}><StudentLessons /></ProtectedRoute>} />
+              <Route path="/student/lessons/:id" element={<ProtectedRoute allowedRoles={['student']}><StudentLessonDetail /></ProtectedRoute>} />
               <Route path="/student/calendar" element={<ProtectedRoute allowedRoles={['student']}><StudentCalendar /></ProtectedRoute>} />
               <Route path="/student/appointments" element={<ProtectedRoute allowedRoles={['student']}><StudentAppointments /></ProtectedRoute>} />
               <Route path="/student/payments" element={<ProtectedRoute allowedRoles={['student']}><StudentPayments /></ProtectedRoute>} />
