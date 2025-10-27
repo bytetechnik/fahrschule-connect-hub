@@ -27,7 +27,8 @@ const AdminStudents = () => {
     teacherId: '',
     validityDate: '',
     status: 'active' as 'active' | 'expired',
-    progress: 0
+    progress: 0,
+    licenseClass: ''
   });
 
   const resetForm = () => {
@@ -37,7 +38,8 @@ const AdminStudents = () => {
       teacherId: '',
       validityDate: '',
       status: 'active',
-      progress: 0
+      progress: 0,
+      licenseClass: ''
     });
     setEditingStudent(null);
   };
@@ -51,7 +53,8 @@ const AdminStudents = () => {
         teacherId: student.teacherId,
         validityDate: student.validityDate,
         status: student.status,
-        progress: student.progress
+        progress: student.progress,
+        licenseClass: student.licenseClass
       });
     } else {
       resetForm();
@@ -62,7 +65,7 @@ const AdminStudents = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.email || !formData.teacherId || !formData.validityDate) {
+    if (!formData.name || !formData.email || !formData.teacherId || !formData.validityDate || !formData.licenseClass) {
       toast({
         title: "Error",
         description: "Please fill in all required fields",
@@ -140,6 +143,32 @@ const AdminStudents = () => {
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     required
                   />
+                </div>
+                <div>
+                  <Label htmlFor="licenseClass">License Class *</Label>
+                  <Select value={formData.licenseClass} onValueChange={(value) => setFormData({ ...formData, licenseClass: value })}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select license class" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="AM">AM - Mopeds</SelectItem>
+                      <SelectItem value="A1">A1 - Light Motorcycles</SelectItem>
+                      <SelectItem value="A2">A2 - Medium Motorcycles</SelectItem>
+                      <SelectItem value="A">A - Heavy Motorcycles</SelectItem>
+                      <SelectItem value="B">B - Cars (up to 3.5t)</SelectItem>
+                      <SelectItem value="BE">BE - Car with Trailer</SelectItem>
+                      <SelectItem value="C1">C1 - Medium Trucks</SelectItem>
+                      <SelectItem value="C1E">C1E - Medium Truck with Trailer</SelectItem>
+                      <SelectItem value="C">C - Heavy Trucks</SelectItem>
+                      <SelectItem value="CE">CE - Heavy Truck with Trailer</SelectItem>
+                      <SelectItem value="D1">D1 - Minibus</SelectItem>
+                      <SelectItem value="D1E">D1E - Minibus with Trailer</SelectItem>
+                      <SelectItem value="D">D - Bus</SelectItem>
+                      <SelectItem value="DE">DE - Bus with Trailer</SelectItem>
+                      <SelectItem value="L">L - Agricultural Tractors</SelectItem>
+                      <SelectItem value="T">T - Fast Agricultural Tractors</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div>
                   <Label htmlFor="teacher">Assigned Teacher *</Label>
@@ -231,7 +260,11 @@ const AdminStudents = () => {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    <div>
+                      <p className="text-sm text-muted-foreground">License Class</p>
+                      <p className="font-medium">{student.licenseClass}</p>
+                    </div>
                     <div>
                       <p className="text-sm text-muted-foreground">{t('teacher')}</p>
                       <p className="font-medium">{teacher?.name}</p>

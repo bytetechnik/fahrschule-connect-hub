@@ -13,6 +13,7 @@ export interface Student {
   validityDate: string;
   status: 'active' | 'expired';
   progress: number;
+  licenseClass: string;
 }
 
 export interface Lesson {
@@ -79,12 +80,12 @@ export const mockTeachers: Teacher[] = [
 ];
 
 export const mockStudents: Student[] = [
-  { id: 'student-1', name: 'Anna Schmidt', email: 'student@fahrschule.de', teacherId: 'teacher-1', validityDate: '2025-12-31', status: 'active', progress: 100 },
-  { id: 'student-2', name: 'Lucas Weber', email: 'lucas.weber@example.com', teacherId: 'teacher-1', validityDate: '2025-11-30', status: 'active', progress: 50 },
-  { id: 'student-3', name: 'Emma Meyer', email: 'emma.meyer@example.com', teacherId: 'teacher-2', validityDate: '2026-01-15', status: 'active', progress: 75 },
-  { id: 'student-4', name: 'Noah Wagner', email: 'noah.wagner@example.com', teacherId: 'teacher-2', validityDate: '2025-10-20', status: 'active', progress: 25 },
-  { id: 'student-5', name: 'Mia Fischer', email: 'mia.fischer@example.com', teacherId: 'teacher-3', validityDate: '2025-12-15', status: 'active', progress: 60 },
-  { id: 'student-6', name: 'Leon Becker', email: 'leon.becker@example.com', teacherId: 'teacher-3', validityDate: '2025-09-30', status: 'active', progress: 40 }
+  { id: 'student-1', name: 'Anna Schmidt', email: 'student@fahrschule.de', teacherId: 'teacher-1', validityDate: '2025-12-31', status: 'active', progress: 100, licenseClass: 'B' },
+  { id: 'student-2', name: 'Lucas Weber', email: 'lucas.weber@example.com', teacherId: 'teacher-1', validityDate: '2025-11-30', status: 'active', progress: 50, licenseClass: 'B' },
+  { id: 'student-3', name: 'Emma Meyer', email: 'emma.meyer@example.com', teacherId: 'teacher-2', validityDate: '2026-01-15', status: 'active', progress: 75, licenseClass: 'A2' },
+  { id: 'student-4', name: 'Noah Wagner', email: 'noah.wagner@example.com', teacherId: 'teacher-2', validityDate: '2025-10-20', status: 'active', progress: 25, licenseClass: 'BE' },
+  { id: 'student-5', name: 'Mia Fischer', email: 'mia.fischer@example.com', teacherId: 'teacher-3', validityDate: '2025-12-15', status: 'active', progress: 60, licenseClass: 'A' },
+  { id: 'student-6', name: 'Leon Becker', email: 'leon.becker@example.com', teacherId: 'teacher-3', validityDate: '2025-09-30', status: 'active', progress: 40, licenseClass: 'C1' }
 ];
 
 export const mockLessons: Lesson[] = [
