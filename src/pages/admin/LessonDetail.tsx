@@ -3,7 +3,7 @@ import { Layout } from '@/components/Layout';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Video, FileText, Pencil } from 'lucide-react';
+import { ArrowLeft, Video, FileText } from 'lucide-react';
 import { getLessons } from '@/lib/mockData';
 
 const AdminLessonDetail = () => {
@@ -37,14 +37,10 @@ const AdminLessonDetail = () => {
   return (
     <Layout>
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
           <Button variant="outline" onClick={() => navigate('/admin/lessons')}>
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Lessons
-          </Button>
-          <Button onClick={() => navigate('/admin/lessons')}>
-            <Pencil className="mr-2 h-4 w-4" />
-            Edit Lesson
+            Back
           </Button>
         </div>
 
@@ -68,7 +64,7 @@ const AdminLessonDetail = () => {
               <div className="space-y-4">
                 <h3 className="text-xl font-semibold flex items-center gap-2">
                   <Video className="h-5 w-5" />
-                  Videos ({lesson.videos.length})
+                  Videos
                 </h3>
                 {lesson.videos.map((video, idx) => {
                   const videoId = extractYouTubeId(video.url);
@@ -99,7 +95,7 @@ const AdminLessonDetail = () => {
               <div className="space-y-4">
                 <h3 className="text-xl font-semibold flex items-center gap-2">
                   <FileText className="h-5 w-5" />
-                  Documents ({lesson.documents.length})
+                  Documents
                 </h3>
                 <div className="grid gap-3">
                   {lesson.documents.map((doc, idx) => (
