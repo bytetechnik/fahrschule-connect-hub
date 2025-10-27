@@ -1,5 +1,6 @@
 import { Layout } from '@/components/Layout';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -9,10 +10,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { getLessons, createLesson, updateLesson, deleteLesson, Lesson } from '@/lib/mockData';
 import { useState } from 'react';
-import { Pencil, Trash2, Plus, FileText, Video } from 'lucide-react';
+import { Pencil, Trash2, Plus, FileText, Video, Eye } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const AdminLessons = () => {
+  const navigate = useNavigate();
   const { t, language } = useLanguage();
   const { toast } = useToast();
   const [lessons, setLessons] = useState<Lesson[]>(getLessons());
@@ -167,18 +169,21 @@ const AdminLessons = () => {
           </Button>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {lessons.map((lesson) => (
             <Card key={lesson.id}>
               <CardHeader>
                 <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <CardTitle>{language === 'de' ? lesson.title : lesson.titleEn}</CardTitle>
-                    <CardDescription>
+                  <div className="flex-1 cursor-pointer" onClick={() => navigate(`/admin/lessons/${lesson.id}`)}>
+                    <CardTitle className="hover:text-primary transition-colors">{language === 'de' ? lesson.title : lesson.titleEn}</CardTitle>
+                    <CardDescription className="line-clamp-2">
                       {language === 'de' ? lesson.description : lesson.descriptionEn}
                     </CardDescription>
                   </div>
                   <div className="flex gap-2">
+                    <Button variant="outline" size="icon" onClick={() => navigate(`/admin/lessons/${lesson.id}`)}>
+                      <Eye className="h-4 w-4" />
+                    </Button>
                     <Button variant="outline" size="icon" onClick={() => handleEdit(lesson)}>
                       <Pencil className="h-4 w-4" />
                     </Button>
@@ -192,7 +197,8 @@ const AdminLessons = () => {
                 <img 
                   src={lesson.thumbnail} 
                   alt={language === 'de' ? lesson.title : lesson.titleEn}
-                  className="w-full h-48 object-cover rounded-md"
+                  className="w-full h-40 object-cover rounded-md cursor-pointer"
+                  onClick={() => navigate(`/admin/lessons/${lesson.id}`)}
                 />
                 
                 {lesson.videos && lesson.videos.length > 0 && (

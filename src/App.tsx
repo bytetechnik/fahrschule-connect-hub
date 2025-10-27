@@ -11,6 +11,7 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import AdminStudents from "./pages/admin/Students";
 import AdminTeachers from "./pages/admin/Teachers";
 import AdminLessons from "./pages/admin/Lessons";
+import AdminLessonDetail from "./pages/admin/LessonDetail";
 import AdminCalendar from "./pages/admin/Calendar";
 import AdminPayments from "./pages/admin/Payments";
 import TeacherDashboard from "./pages/teacher/Dashboard";
@@ -44,6 +45,7 @@ const App = () => (
               <Route path="/admin/students" element={<ProtectedRoute allowedRoles={['admin']}><AdminStudents /></ProtectedRoute>} />
               <Route path="/admin/teachers" element={<ProtectedRoute allowedRoles={['admin']}><AdminTeachers /></ProtectedRoute>} />
               <Route path="/admin/lessons" element={<ProtectedRoute allowedRoles={['admin']}><AdminLessons /></ProtectedRoute>} />
+              <Route path="/admin/lessons/:id" element={<ProtectedRoute allowedRoles={['admin']}><AdminLessonDetail /></ProtectedRoute>} />
               <Route path="/admin/calendar" element={<ProtectedRoute allowedRoles={['admin']}><AdminCalendar /></ProtectedRoute>} />
               <Route path="/admin/payments" element={<ProtectedRoute allowedRoles={['admin']}><AdminPayments /></ProtectedRoute>} />
               
