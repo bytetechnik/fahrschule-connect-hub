@@ -23,6 +23,8 @@ export interface Lesson {
   descriptionEn: string;
   videoUrl: string;
   thumbnail: string;
+  videos?: { title: string; url: string }[];
+  documents?: { name: string; url: string; type: string }[];
 }
 
 export interface Progress {
@@ -312,6 +314,49 @@ export const deleteTeacher = (id: string): boolean => {
   if (filtered.length === teachers.length) return false;
   
   saveTeachers(filtered);
+  return true;
+};
+
+export const getLessons = (): Lesson[] => {
+  const stored = localStorage.getItem('lessons');
+  if (stored) {
+    return JSON.parse(stored);
+  }
+  localStorage.setItem('lessons', JSON.stringify(mockLessons));
+  return mockLessons;
+};
+
+export const saveLessons = (lessons: Lesson[]) => {
+  localStorage.setItem('lessons', JSON.stringify(lessons));
+};
+
+export const createLesson = (lesson: Omit<Lesson, 'id'>): Lesson => {
+  const lessons = getLessons();
+  const newLesson: Lesson = {
+    ...lesson,
+    id: `lesson-${Date.now()}`,
+  };
+  lessons.push(newLesson);
+  saveLessons(lessons);
+  return newLesson;
+};
+
+export const updateLesson = (id: string, updates: Partial<Lesson>): Lesson | null => {
+  const lessons = getLessons();
+  const index = lessons.findIndex(l => l.id === id);
+  if (index === -1) return null;
+  
+  lessons[index] = { ...lessons[index], ...updates };
+  saveLessons(lessons);
+  return lessons[index];
+};
+
+export const deleteLesson = (id: string): boolean => {
+  const lessons = getLessons();
+  const filtered = lessons.filter(l => l.id !== id);
+  if (filtered.length === lessons.length) return false;
+  
+  saveLessons(filtered);
   return true;
 };
 
