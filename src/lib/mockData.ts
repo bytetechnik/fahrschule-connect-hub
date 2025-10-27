@@ -676,7 +676,13 @@ export const deleteTeacher = (id: string): boolean => {
 export const getLessons = (): Lesson[] => {
   const stored = localStorage.getItem('lessons');
   if (stored) {
-    return JSON.parse(stored);
+    const storedLessons = JSON.parse(stored);
+    // Merge with mockLessons to ensure all default lessons are present
+    const mockLessonIds = new Set(mockLessons.map(l => l.id));
+    const customLessons = storedLessons.filter((l: Lesson) => !mockLessonIds.has(l.id));
+    const mergedLessons = [...mockLessons, ...customLessons];
+    localStorage.setItem('lessons', JSON.stringify(mergedLessons));
+    return mergedLessons;
   }
   localStorage.setItem('lessons', JSON.stringify(mockLessons));
   return mockLessons;
