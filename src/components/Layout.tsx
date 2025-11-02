@@ -14,10 +14,12 @@ import {
   UserCog,
   CalendarDays,
   ShoppingBag,
-  Menu
+  Menu,
+  CarFront
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import logo from '@/assets/bt_logo.png';
+import { APP_NAME } from '@/constants';
 
 interface LayoutProps {
   children: ReactNode;
@@ -41,6 +43,7 @@ export const Layout = ({ children }: LayoutProps) => {
           { path: `${baseRoute}/students`, icon: Users, label: t('students') },
           { path: `${baseRoute}/teachers`, icon: UserCog, label: t('teachers') },
           { path: `${baseRoute}/lessons`, icon: BookOpen, label: t('lessons') },
+          { path: `${baseRoute}/practical-lessons`, icon: CarFront, label: t('practicalLessons') },
           { path: `${baseRoute}/calendar`, icon: CalendarDays, label: t('calendar') },
           { path: `${baseRoute}/payments`, icon: CreditCard, label: t('payments') },
           { path: `${baseRoute}/shop`, icon: ShoppingBag, label: t('shop') },
@@ -49,14 +52,15 @@ export const Layout = ({ children }: LayoutProps) => {
         return [
           { path: `${baseRoute}/dashboard`, icon: LayoutDashboard, label: t('dashboard') },
           { path: `${baseRoute}/students`, icon: Users, label: t('students') },
+          { path: `${baseRoute}/practical-lessons`, icon: CarFront, label: t('practicalLessons') },
           { path: `${baseRoute}/calendar`, icon: CalendarDays, label: t('calendar') },
           { path: `${baseRoute}/appointments`, icon: Calendar, label: t('appointments') },
-          { path: `${baseRoute}/payments`, icon: CreditCard, label: t('payments') },
         ];
       case 'student':
         return [
           { path: `${baseRoute}/dashboard`, icon: LayoutDashboard, label: t('dashboard') },
           { path: `${baseRoute}/lessons`, icon: BookOpen, label: t('lessons') },
+          { path: `${baseRoute}/practical-lessons`, icon: CarFront, label: t('practicalLessons') },
           { path: `${baseRoute}/calendar`, icon: CalendarDays, label: t('calendar') },
           { path: `${baseRoute}/appointments`, icon: Calendar, label: t('appointments') },
           { path: `${baseRoute}/payments`, icon: CreditCard, label: t('payments') },
@@ -111,7 +115,7 @@ export const Layout = ({ children }: LayoutProps) => {
 
               <img src={logo} alt="ByteTechnik Fahrschule Logo" className="h-8 w-8 md:h-10 md:w-10 object-contain" />
               <div className="min-w-0">
-                <h1 className="text-lg md:text-2xl font-bold text-foreground truncate">ByteTechnik Fahrschule</h1>
+                <h1 className="text-lg md:text-2xl font-bold text-foreground truncate">{APP_NAME}</h1>
                 <p className="text-xs md:text-sm text-muted-foreground truncate">{user.name} - {t(user.role)}</p>
               </div>
             </div>

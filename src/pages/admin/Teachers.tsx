@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
-import { getStudents, getTeachers, createTeacher, updateTeacher, deleteTeacher, type Teacher } from '@/lib/mockData';
+import { getStudents, getTeachers, createTeacher, updateTeacher, deleteTeacher, type Teacher, type Student } from '@/lib/mockData';
 import { useToast } from '@/hooks/use-toast';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 
@@ -17,10 +17,11 @@ const AdminTeachers = () => {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [teachers, setTeachers] = useState<Teacher[]>([]);
-  const [students, setStudents] = useState<any[]>([]);
+  const [students, setStudents] = useState<Student[]>([]);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
   const [formData, setFormData] = useState({ name: '', email: '', status: 'active' as 'active' | 'inactive' });
 
@@ -34,6 +35,7 @@ const AdminTeachers = () => {
   };
 
   const handleAdd = () => {
+    if (isProcessing) return;
     if (!formData.name.trim() || !formData.email.trim()) {
       toast({
         title: t('error'),
@@ -42,19 +44,30 @@ const AdminTeachers = () => {
       });
       return;
     }
-
-    createTeacher(formData);
-    loadData();
-    setIsAddDialogOpen(false);
-    setFormData({ name: '', email: '', status: 'active' });
-    toast({
-      title: t('success'),
-      description: 'Teacher added successfully',
-    });
+    try {
+      setIsProcessing(true);
+      createTeacher(formData);
+      loadData();
+      setIsAddDialogOpen(false);
+      setFormData({ name: '', email: '', status: 'active' });
+      toast({
+        title: t('success'),
+        description: 'Teacher added successfully',
+      });
+    } catch (err) {
+      toast({
+        title: t('error'),
+        description: 'Failed to add teacher. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleEdit = () => {
     if (!selectedTeacher) return;
+    if (isProcessing) return;
     
     if (!formData.name.trim() || !formData.email.trim()) {
       toast({
@@ -64,29 +77,50 @@ const AdminTeachers = () => {
       });
       return;
     }
-
-    updateTeacher(selectedTeacher.id, formData);
-    loadData();
-    setIsEditDialogOpen(false);
-    setSelectedTeacher(null);
-    setFormData({ name: '', email: '', status: 'active' });
-    toast({
-      title: t('success'),
-      description: 'Teacher updated successfully',
-    });
+    try {
+      setIsProcessing(true);
+      updateTeacher(selectedTeacher.id, formData);
+      loadData();
+      setIsEditDialogOpen(false);
+      setSelectedTeacher(null);
+      setFormData({ name: '', email: '', status: 'active' });
+      toast({
+        title: t('success'),
+        description: 'Teacher updated successfully',
+      });
+    } catch (err) {
+      toast({
+        title: t('error'),
+        description: 'Failed to update teacher. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleDelete = () => {
     if (!selectedTeacher) return;
-
-    deleteTeacher(selectedTeacher.id);
-    loadData();
-    setIsDeleteDialogOpen(false);
-    setSelectedTeacher(null);
-    toast({
-      title: t('success'),
-      description: 'Teacher deleted successfully',
-    });
+    if (isProcessing) return;
+    try {
+      setIsProcessing(true);
+      deleteTeacher(selectedTeacher.id);
+      loadData();
+      setIsDeleteDialogOpen(false);
+      setSelectedTeacher(null);
+      toast({
+        title: t('success'),
+        description: 'Teacher deleted successfully',
+      });
+    } catch (err) {
+      toast({
+        title: t('error'),
+        description: 'Failed to delete teacher. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const openEditDialog = (teacher: Teacher) => {

@@ -60,14 +60,39 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
-## How can I deploy this project?
+## Deploying to Netlify
 
-Simply open [Lovable](https://lovable.dev/projects/ce401a65-97a6-4a6d-a086-e6a728f8013b) and click on Share -> Publish.
+This project is a Vite + React SPA using mock data (no backend). To deploy on Netlify:
 
-## Can I connect a custom domain to my Lovable project?
+1. Push the repo to GitHub
+2. In Netlify, click "New site from Git" and choose your repo
+3. Build settings:
+   - Build command: `npm run build`
+   - Publish directory: `dist`
+4. Ensure SPA routing works via either `public/_redirects` or `netlify.toml` included in the repo
 
-Yes, you can!
+Environment variables are not required for this demo (no APIs).
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### Demo Login Credentials
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Use any of the following on the Login page to preview role-based dashboards:
+
+- Admin: `admin@fahrschule.de` / `Admin123!`
+- Teacher: `teacher@fahrschule.de` / `Teacher123!`
+- Student: `student@fahrschule.de` / `Student123!`
+
+### Project Structure
+
+- `src/contexts`: Auth and Language contexts
+- `src/components`: UI elements and layout
+- `src/pages`: Role-based pages
+- `src/lib/mockData.ts`: All mock data and localStorage CRUD helpers
+- `src/constants`: App constants
+
+### Development
+
+```sh
+npm i
+npm run dev
+```
+

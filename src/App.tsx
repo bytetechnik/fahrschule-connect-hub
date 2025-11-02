@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import Login from "./pages/Login";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminStudents from "./pages/admin/Students";
@@ -15,11 +16,12 @@ import AdminLessonDetail from "./pages/admin/LessonDetail";
 import AdminCalendar from "./pages/admin/Calendar";
 import AdminPayments from "./pages/admin/Payments";
 import AdminShop from "./pages/admin/Shop";
+import AdminPracticalLessons from "./pages/admin/PracticalLessons";
 import TeacherDashboard from "./pages/teacher/Dashboard";
 import TeacherStudents from "./pages/teacher/Students";
 import TeacherCalendar from "./pages/teacher/Calendar";
 import TeacherAppointments from "./pages/teacher/Appointments";
-import TeacherPayments from "./pages/teacher/Payments";
+import TeacherPracticalLessons from "./pages/teacher/PracticalLessons";
 import StudentDashboard from "./pages/student/Dashboard";
 import StudentLessons from "./pages/student/Lessons";
 import StudentLessonDetail from "./pages/student/LessonDetail";
@@ -27,6 +29,7 @@ import StudentCalendar from "./pages/student/Calendar";
 import StudentAppointments from "./pages/student/Appointments";
 import StudentPayments from "./pages/student/Payments";
 import StudentShop from "./pages/student/Shop";
+import StudentPracticalLessons from "./pages/student/PracticalLessons";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,10 +39,11 @@ const App = () => (
     <TooltipProvider>
       <AuthProvider>
         <LanguageProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
+          <ErrorBoundary>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
               <Route path="/" element={<Navigate to="/login" replace />} />
               <Route path="/login" element={<Login />} />
               
@@ -51,12 +55,13 @@ const App = () => (
               <Route path="/admin/calendar" element={<ProtectedRoute allowedRoles={['admin']}><AdminCalendar /></ProtectedRoute>} />
               <Route path="/admin/payments" element={<ProtectedRoute allowedRoles={['admin']}><AdminPayments /></ProtectedRoute>} />
               <Route path="/admin/shop" element={<ProtectedRoute allowedRoles={['admin']}><AdminShop /></ProtectedRoute>} />
+              <Route path="/admin/practical-lessons" element={<ProtectedRoute allowedRoles={['admin']}><AdminPracticalLessons /></ProtectedRoute>} />
               
               <Route path="/teacher/dashboard" element={<ProtectedRoute allowedRoles={['teacher']}><TeacherDashboard /></ProtectedRoute>} />
               <Route path="/teacher/students" element={<ProtectedRoute allowedRoles={['teacher']}><TeacherStudents /></ProtectedRoute>} />
               <Route path="/teacher/calendar" element={<ProtectedRoute allowedRoles={['teacher']}><TeacherCalendar /></ProtectedRoute>} />
               <Route path="/teacher/appointments" element={<ProtectedRoute allowedRoles={['teacher']}><TeacherAppointments /></ProtectedRoute>} />
-              <Route path="/teacher/payments" element={<ProtectedRoute allowedRoles={['teacher']}><TeacherPayments /></ProtectedRoute>} />
+              <Route path="/teacher/practical-lessons" element={<ProtectedRoute allowedRoles={['teacher']}><TeacherPracticalLessons /></ProtectedRoute>} />
               
               <Route path="/student/dashboard" element={<ProtectedRoute allowedRoles={['student']}><StudentDashboard /></ProtectedRoute>} />
               <Route path="/student/lessons" element={<ProtectedRoute allowedRoles={['student']}><StudentLessons /></ProtectedRoute>} />
@@ -65,10 +70,12 @@ const App = () => (
               <Route path="/student/appointments" element={<ProtectedRoute allowedRoles={['student']}><StudentAppointments /></ProtectedRoute>} />
               <Route path="/student/payments" element={<ProtectedRoute allowedRoles={['student']}><StudentPayments /></ProtectedRoute>} />
               <Route path="/student/shop" element={<ProtectedRoute allowedRoles={['student']}><StudentShop /></ProtectedRoute>} />
+              <Route path="/student/practical-lessons" element={<ProtectedRoute allowedRoles={['student']}><StudentPracticalLessons /></ProtectedRoute>} />
               
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </ErrorBoundary>
         </LanguageProvider>
       </AuthProvider>
     </TooltipProvider>

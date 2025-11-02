@@ -3,7 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, CheckCircle, Calendar } from 'lucide-react';
-import { mockStudents, getProgress, getAppointments } from '@/lib/mockData';
+import { mockStudents, getProgress, getAppointments, getPracticalLessonRecordsByStudent } from '@/lib/mockData';
 
 const TeacherDashboard = () => {
   const { user } = useAuth();
@@ -14,7 +14,7 @@ const TeacherDashboard = () => {
   const appointments = getAppointments();
   
   const upcomingAppointments = appointments.filter(
-    a => a.teacherId === user?.id && new Date(a.date) >= new Date()
+    a => a.teacherId === user?.id && a.status === 'scheduled' && new Date(`${a.date}T${a.time}`) >= new Date()
   );
 
   const stats = [
@@ -73,6 +73,8 @@ const TeacherDashboard = () => {
                 const completedLessons = progress.filter(
                   p => p.studentId === student.id && p.completed
                 ).length;
+                const practicalLessonCount = getPracticalLessonRecordsByStudent(student.id)
+                  .filter(r => r.teacherId === user?.id).length;
                 
                 return (
                   <div key={student.id} className="flex items-center justify-between p-3 border rounded-lg gap-2">
@@ -80,9 +82,14 @@ const TeacherDashboard = () => {
                       <p className="font-medium truncate">{student.name}</p>
                       <p className="text-sm text-muted-foreground truncate">{student.email}</p>
                     </div>
-                    <div className="text-right shrink-0">
+                    <div className="text-right shrink-0 space-y-1">
                       <p className="text-sm font-medium">{student.progress}%</p>
-                      <p className="text-xs text-muted-foreground">{completedLessons} lessons</p>
+                      <p className="text-xs text-muted-foreground">
+                        {completedLessons} {t('theoryLessons')}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {practicalLessonCount} {practicalLessonCount === 1 ? t('practicalLesson') : t('practicalLessons')}
+                      </p>
                     </div>
                   </div>
                 );

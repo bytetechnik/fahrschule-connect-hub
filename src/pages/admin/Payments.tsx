@@ -1,15 +1,25 @@
+import { useState } from 'react';
 import { Layout } from '@/components/Layout';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Download } from 'lucide-react';
 import { getPayments, mockStudents } from '@/lib/mockData';
 
 const AdminPayments = () => {
   const { t } = useLanguage();
-  const payments = getPayments();
+  const [selectedStudentId, setSelectedStudentId] = useState<string>('all');
+  const allPayments = getPayments();
 
+  // Filter payments based on selected student
+  const payments = selectedStudentId === 'all'
+    ? allPayments
+    : allPayments.filter(p => p.studentId === selectedStudentId);
+
+  // Calculate total revenue for filtered payments
   const totalRevenue = payments.reduce((sum, p) => sum + p.amount, 0);
 
   return (
@@ -28,7 +38,35 @@ const AdminPayments = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Total Revenue</CardTitle>
+            <CardTitle>Select Student</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              <Label htmlFor="student-select">Filter by Student</Label>
+              <Select value={selectedStudentId} onValueChange={(value) => setSelectedStudentId(value)}>
+                <SelectTrigger id="student-select" className="w-full sm:w-[300px]">
+                  <SelectValue placeholder="All Students" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Students</SelectItem>
+                  {mockStudents.map((student) => (
+                    <SelectItem key={student.id} value={student.id}>
+                      {student.name} ({student.email})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              {selectedStudentId === 'all'
+                ? 'Total Revenue'
+                : `Total Revenue - ${mockStudents.find(s => s.id === selectedStudentId)?.name || ''}`}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-4xl font-bold">€{totalRevenue.toFixed(2)}</p>
