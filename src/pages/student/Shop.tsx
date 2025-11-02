@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ShoppingCart, Euro, Plus, Minus } from 'lucide-react';
-import { getProducts, getStudents, getProductPriceForStudent, getPayments, savePayments, Payment } from '@/lib/mockData';
+import { getProducts, getStudents, getProductPriceForStudent, getPayments, savePayments, Payment, addDrivingLessonTickets } from '@/lib/mockData';
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
 
@@ -54,6 +54,11 @@ const StudentShop = () => {
     
     payments.push(newPayment);
     savePayments(payments);
+
+    // If the purchase is for driving lessons, credit tickets immediately
+    if (product.type === 'driving-lesson') {
+      addDrivingLessonTickets(currentStudent.id, quantity);
+    }
 
     toast({
       title: t('success'),

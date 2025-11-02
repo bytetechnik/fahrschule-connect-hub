@@ -20,6 +20,8 @@ const AdminShop = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [deleteProductId, setDeleteProductId] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     nameEn: '',
@@ -63,37 +65,49 @@ const AdminShop = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     if (!formData.name || !formData.nameEn || !formData.basePriceByYear.length) {
       toast({
         title: "Error",
         description: "Please fill in all required fields",
         variant: "destructive"
       });
+      setIsSubmitting(false);
       return;
     }
-
-    if (editingProduct) {
-      updateProduct(editingProduct.id, formData);
+    try {
+      if (editingProduct) {
+        updateProduct(editingProduct.id, formData);
+        toast({
+          title: t('success'),
+          description: "Product updated successfully"
+        });
+      } else {
+        createProduct(formData);
+        toast({
+          title: t('success'),
+          description: "Product created successfully"
+        });
+      }
+      setProducts(getProducts());
+      setIsDialogOpen(false);
+      resetForm();
+    } catch (err) {
       toast({
-        title: t('success'),
-        description: "Product updated successfully"
+        title: t('error'),
+        description: 'Failed to save product. Please try again.',
+        variant: 'destructive'
       });
-    } else {
-      createProduct(formData);
-      toast({
-        title: t('success'),
-        description: "Product created successfully"
-      });
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setProducts(getProducts());
-    setIsDialogOpen(false);
-    resetForm();
   };
 
   const handleDelete = () => {
-    if (deleteProductId) {
+    if (!deleteProductId || isDeleting) return;
+    setIsDeleting(true);
+    try {
       deleteProduct(deleteProductId);
       setProducts(getProducts());
       toast({
@@ -101,6 +115,14 @@ const AdminShop = () => {
         description: "Product deleted successfully"
       });
       setDeleteProductId(null);
+    } catch (err) {
+      toast({
+        title: t('error'),
+        description: 'Failed to delete product. Please try again.',
+        variant: 'destructive'
+      });
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -201,7 +223,15 @@ const AdminShop = () => {
                 </div>
                 <div>
                   <Label htmlFor="type">Type *</Label>
-                  <Select value={formData.type} onValueChange={(value: any) => setFormData({ ...formData, type: value })}>
+                  <Select
+                    value={formData.type}
+                    onValueChange={(value: string) =>
+                      setFormData({
+                        ...formData,
+                        type: value as 'theory-app' | 'driving-lesson' | 'theory-exam' | 'practical-exam',
+                      })
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>

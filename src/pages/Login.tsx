@@ -9,6 +9,7 @@ import { LanguageToggle } from '@/components/LanguageToggle';
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import logo from '@/assets/bt_logo.png';
+import { APP_NAME, APP_TAGLINE } from '@/constants';
 import { useToast } from '@/hooks/use-toast';
 
 const Login = () => {
@@ -60,8 +61,8 @@ const Login = () => {
           <div className="flex justify-center mb-4">
             <img src={logo} alt="ByteTechnik Fahrschule Logo" className="h-12 w-12 md:h-16 md:w-16 object-contain" />
           </div>
-          <h1 className="text-2xl md:text-3xl font-bold text-foreground">ByteTechnik Fahrschule</h1>
-          <p className="text-sm md:text-base text-muted-foreground">Management System</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">{APP_NAME}</h1>
+          <p className="text-sm md:text-base text-muted-foreground">{APP_TAGLINE}</p>
         </div>
 
         <div className="flex justify-center">

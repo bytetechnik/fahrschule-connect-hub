@@ -10,7 +10,8 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
-import { mockTeachers, getProgress, mockLessons, getStudents, createStudent, updateStudent, deleteStudent, Student } from '@/lib/mockData';
+import { mockTeachers, getProgress, mockLessons, getStudents, createStudent, updateStudent, deleteStudent, Student, getStudentProcessByStudentId, updateStudentProcess } from '@/lib/mockData';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 
 const AdminStudents = () => {
@@ -31,6 +32,17 @@ const AdminStudents = () => {
     licenseClass: '',
     joiningDate: ''
   });
+  const [processForm, setProcessForm] = useState({
+    currentStep: 'prerequisites' as 'prerequisites' | 'registration' | 'theory' | 'practical',
+    prerequisites: {
+      firstAidCertificate: false,
+      biometricPhotos: false,
+      eyeTest: false,
+    },
+    registrationDone: false,
+    theoryDone: false,
+    practicalDone: false,
+  });
 
   const resetForm = () => {
     setFormData({
@@ -44,6 +56,17 @@ const AdminStudents = () => {
       joiningDate: ''
     });
     setEditingStudent(null);
+    setProcessForm({
+      currentStep: 'prerequisites',
+      prerequisites: {
+        firstAidCertificate: false,
+        biometricPhotos: false,
+        eyeTest: false,
+      },
+      registrationDone: false,
+      theoryDone: false,
+      practicalDone: false,
+    });
   };
 
   const handleOpenDialog = (student?: Student) => {
@@ -58,6 +81,19 @@ const AdminStudents = () => {
         progress: student.progress,
         licenseClass: student.licenseClass,
         joiningDate: student.joiningDate
+      });
+      const proc = getStudentProcessByStudentId(student.id);
+      const current = proc?.currentStep || 'prerequisites';
+      setProcessForm({
+        currentStep: current,
+        prerequisites: {
+          firstAidCertificate: Boolean(proc?.prerequisites?.firstAidCertificate),
+          biometricPhotos: Boolean(proc?.prerequisites?.biometricPhotos),
+          eyeTest: Boolean(proc?.prerequisites?.eyeTest),
+        },
+        registrationDone: current !== 'prerequisites',
+        theoryDone: current === 'theory' || current === 'practical',
+        practicalDone: current === 'practical',
       });
     } else {
       resetForm();
@@ -79,12 +115,14 @@ const AdminStudents = () => {
 
     if (editingStudent) {
       updateStudent(editingStudent.id, formData);
+      updateStudentProcess(editingStudent.id, processForm);
       toast({
         title: t('success'),
         description: "Student updated successfully"
       });
     } else {
-      createStudent(formData);
+      const created = createStudent(formData);
+      updateStudentProcess(created.id, processForm);
       toast({
         title: t('success'),
         description: "Student created successfully"
@@ -231,6 +269,74 @@ const AdminStudents = () => {
                     onChange={(e) => setFormData({ ...formData, progress: parseInt(e.target.value) || 0 })}
                   />
                 </div>
+                <div className="pt-2">
+                  <p className="text-sm font-medium mb-2">Driving School Process</p>
+                  <div className="grid gap-3">
+                    <div className="mt-1">
+                      <Label className="mb-2 block">Process Steps</Label>
+                      <div className="space-y-2">
+                        <label className="flex items-center gap-2 text-sm">
+                          <Checkbox
+                            checked={processForm.registrationDone}
+                            onCheckedChange={(checked) => {
+                              const registrationDone = Boolean(checked);
+                              const theoryDone = registrationDone ? processForm.theoryDone : false;
+                              const practicalDone = registrationDone ? processForm.practicalDone : false;
+                              const nextStep = practicalDone
+                                ? 'practical'
+                                : theoryDone
+                                  ? 'theory'
+                                  : registrationDone
+                                    ? 'registration'
+                                    : 'prerequisites';
+                              setProcessForm({ ...processForm, registrationDone, theoryDone, practicalDone, currentStep: nextStep });
+                            }}
+                          />
+                          <span>Registration completed</span>
+                        </label>
+                        <label className="flex items-center gap-2 text-sm">
+                          <Checkbox
+                            checked={processForm.theoryDone}
+                            onCheckedChange={(checked) => {
+                              const theoryDone = Boolean(checked);
+                              const registrationDone = theoryDone ? true : processForm.registrationDone;
+                              const practicalDone = theoryDone ? processForm.practicalDone : false;
+                              const nextStep = practicalDone
+                                ? 'practical'
+                                : theoryDone
+                                  ? 'theory'
+                                  : registrationDone
+                                    ? 'registration'
+                                    : 'prerequisites';
+                              setProcessForm({ ...processForm, registrationDone, theoryDone, practicalDone, currentStep: nextStep });
+                            }}
+                          />
+                          <span>Theory class completed</span>
+                        </label>
+                        <label className="flex items-center gap-2 text-sm">
+                          <Checkbox
+                            checked={processForm.practicalDone}
+                            onCheckedChange={(checked) => {
+                              const practicalDone = Boolean(checked);
+                              const theoryDone = practicalDone ? true : processForm.theoryDone;
+                              const registrationDone = practicalDone ? true : processForm.registrationDone;
+                              const nextStep = practicalDone
+                                ? 'practical'
+                                : theoryDone
+                                  ? 'theory'
+                                  : registrationDone
+                                    ? 'registration'
+                                    : 'prerequisites';
+                              setProcessForm({ ...processForm, registrationDone, theoryDone, practicalDone, currentStep: nextStep });
+                            }}
+                          />
+                          <span>Practical class completed</span>
+                        </label>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
                 <div className="flex justify-end gap-2">
                   <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
                     {t('cancelBtn')}
@@ -250,6 +356,16 @@ const AdminStudents = () => {
             const completedLessons = progress.filter(
               p => p.studentId === student.id && p.completed
             ).length;
+            const process = getStudentProcessByStudentId(student.id);
+            const currentStepLabel = (() => {
+              switch (process?.currentStep) {
+                case 'prerequisites': return 'Prerequisites';
+                case 'registration': return 'Registration';
+                case 'theory': return 'Theory Class';
+                case 'practical': return 'Practical Class';
+                default: return '—';
+              }
+            })();
             
             return (
               <Card key={student.id}>
@@ -294,6 +410,7 @@ const AdminStudents = () => {
                       <p className="text-xs md:text-sm text-muted-foreground">{t('accountValidity')}</p>
                       <p className="text-sm md:text-base font-medium truncate">{student.validityDate}</p>
                     </div>
+                    
                   </div>
                 </CardContent>
               </Card>
