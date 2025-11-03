@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, UserRound } from "lucide-react";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -45,11 +45,11 @@ const Home = () => {
             <Link to="/" className="flex items-center space-x-3 group">
               <div className="relative">
                 <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl group-hover:bg-primary/30 transition-all duration-300"></div>
-                <img src={logo} alt="ByteTechnik" className="h-12 w-12 relative z-10 group-hover:scale-110 transition-transform duration-300" />
+                <img src={logo} alt="Fahrschule" className="h-12 w-12 relative z-10 group-hover:scale-110 transition-transform duration-300" />
               </div>
               <div className="hidden sm:block">
                 <div className="text-xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
-                  ByteTechnik
+                  Fahrschule
                 </div>
                 <div className="text-xs text-muted-foreground -mt-1">Fahrschule</div>
               </div>
@@ -155,7 +155,9 @@ const Home = () => {
                 variant="outline" 
                 className="border-2 hover:bg-primary/5 hover:border-primary/50 transition-all duration-300"
               >
-                <Link to="/login">{t('login')}</Link>
+                <Link to="/login" aria-label={t('login')} className="flex items-center justify-center">
+                  <UserRound className="h-5 w-5" />
+                </Link>
               </Button>
             </nav>
 
@@ -248,8 +250,8 @@ const Home = () => {
                         variant="outline" 
                         className="w-full border-2 hover:bg-primary/5 hover:border-primary/50"
                       >
-                        <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
-                          {t('login')}
+                        <Link to="/login" onClick={() => setMobileMenuOpen(false)} aria-label={t('login')} className="flex items-center justify-center py-2">
+                          <UserRound className="h-5 w-5" />
                         </Link>
                       </Button>
                     </div>
@@ -335,15 +337,11 @@ const Home = () => {
         <div className="container mx-auto px-4 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="flex items-center space-x-2">
-              <img src={logo} alt="ByteTechnik" className="h-8 w-8" />
-              <span className="text-lg font-semibold">ByteTechnik Fahrschule</span>
+              <img src={logo} alt="Fahrschule" className="h-8 w-8" />
+              <span className="text-lg font-semibold">Fahrschule Management System</span>
             </div>
-            <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} {t('footerCopyright')}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              {t('developedBy')}
-            </p>
+            <p className="text-sm text-muted-foreground">© 2025 ByteTechnik Fahrschule. All rights reserved.</p>
+            <p className="text-sm text-muted-foreground">Developed by the ByteTechnik.de</p>
           </div>
         </div>
       </footer>

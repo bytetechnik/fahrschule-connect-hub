@@ -320,7 +320,8 @@ const Register = () => {
 
       <footer className="border-t py-8 mt-12">
         <div className="container text-center text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} Fahrschule Butterfly GmbH - {t('allRightsReserved')}</p>
+          <p>© 2025 ByteTechnik Fahrschule. All rights reserved.</p>
+          <p>Developed by the ByteTechnik.de</p>
         </div>
       </footer>
     </div>

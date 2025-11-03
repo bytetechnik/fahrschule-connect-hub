@@ -59,7 +59,7 @@ const Login = () => {
       <div className="w-full max-w-md space-y-4 md:space-y-6">
         <div className="text-center space-y-2">
           <div className="flex justify-center mb-4">
-            <img src={logo} alt="ByteTechnik Fahrschule Logo" className="h-12 w-12 md:h-16 md:w-16 object-contain" />
+            <img src={logo} alt="Fahrschule Logo" className="h-12 w-12 md:h-16 md:w-16 object-contain" />
           </div>
           <h1 className="text-2xl md:text-3xl font-bold text-foreground">{APP_NAME}</h1>
           <p className="text-sm md:text-base text-muted-foreground">{APP_TAGLINE}</p>

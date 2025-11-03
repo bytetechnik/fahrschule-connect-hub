@@ -282,7 +282,7 @@ const translations: Record<Language, Record<string, string>> = {
     'onlineRegistration': 'Online Anmeldung',
     'heroTitle1': 'Ihr Weg zum',
     'heroTitle2': 'Führerschein',
-    'heroDescription': 'Moderne Fahrausbildung mit erfahrenen Fahrlehrern und flexiblen Kurszeiten. Starten Sie noch heute Ihre Fahrausbildung mit ByteTechnik Fahrschule.',
+    'heroDescription': 'Moderne Fahrausbildung mit erfahrenen Fahrlehrern und flexiblen Kurszeiten. Starten Sie noch heute Ihre Fahrausbildung mit unserer Fahrschule.',
     'getStartedNow': 'Jetzt starten',
     'contactUs': 'Kontaktieren Sie uns',
     'expertInstructors': 'Erfahrene Fahrlehrer',
@@ -291,8 +291,8 @@ const translations: Record<Language, Record<string, string>> = {
     'flexibleSchedulesDesc': 'Wählen Sie aus Morgen-, Abend- und Wochenendkursen, die zu Ihrem Lebensstil passen',
     'highSuccessRate': 'Hohe Erfolgsquote',
     'highSuccessRateDesc': '95% unserer Schüler bestehen ihre Fahrprüfung beim ersten Versuch',
-    'footerCopyright': 'ByteTechnik Fahrschule Management System. Alle Rechte vorbehalten.',
-    'developedBy': 'Entwickelt von ByteTechnik',
+    'footerCopyright': 'Fahrschule Management System. Alle Rechte vorbehalten.',
+    'developedBy': 'Entwickelt vom Team',
     'allRightsReserved': 'Alle Rechte vorbehalten',
     
     // Registration Form
@@ -611,7 +611,7 @@ const translations: Record<Language, Record<string, string>> = {
     'onlineRegistration': 'Online Registration',
     'heroTitle1': 'Your Journey to a',
     'heroTitle2': 'Driver\'s License',
-    'heroDescription': 'Modern driving education with experienced instructors and flexible course schedules. Start your driving journey today with ByteTechnik Fahrschule.',
+    'heroDescription': 'Modern driving education with experienced instructors and flexible course schedules. Start your driving journey today with our driving school.',
     'getStartedNow': 'Get Started Now',
     'contactUs': 'Contact Us',
     'expertInstructors': 'Expert Instructors',
@@ -620,8 +620,8 @@ const translations: Record<Language, Record<string, string>> = {
     'flexibleSchedulesDesc': 'Choose from morning, evening, and weekend classes that fit your lifestyle',
     'highSuccessRate': 'High Success Rate',
     'highSuccessRateDesc': '95% of our students pass their driving test on the first attempt',
-    'footerCopyright': 'ByteTechnik Fahrschule Management System. All rights reserved.',
-    'developedBy': 'Developed by ByteTechnik',
+    'footerCopyright': 'Fahrschule Management System. All rights reserved.',
+    'developedBy': 'Developed by the team',
     'allRightsReserved': 'All rights reserved',
     
     // Registration Form
