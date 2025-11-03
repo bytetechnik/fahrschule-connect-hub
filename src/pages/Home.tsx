@@ -11,24 +11,27 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { LanguageToggle } from "@/components/LanguageToggle";
+import { useLanguage } from "@/contexts/LanguageContext";
 import logo from "@/assets/bt_logo.png";
 
 const Home = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { t } = useLanguage();
 
   const drivingSchoolLinks = [
-    { title: "Our Story", href: "#story" },
-    { title: "Our Instructors", href: "#instructors" },
-    { title: "Our Locations", href: "#our-locations" },
-    { title: "AZAV Certification", href: "#certification" },
+    { title: t('ourStory'), href: "#story" },
+    { title: t('ourInstructors'), href: "#instructors" },
+    { title: t('ourLocations'), href: "#our-locations" },
+    { title: t('azavCertification'), href: "#certification" },
   ];
 
   const coursesLinks = [
-    { title: "Current Dates", href: "#dates" },
-    { title: "Intensive Holiday Courses", href: "#intensive" },
-    { title: "Theory Lessons", href: "#theory" },
-    { title: "Practical Lessons", href: "#practical" },
-    { title: "Exam Preparation", href: "#exam-prep" },
+    { title: t('currentDates'), href: "#dates" },
+    { title: t('intensiveHolidayCourses'), href: "#intensive" },
+    { title: t('theoryLessonsMenu'), href: "#theory" },
+    { title: t('practicalLessonsMenu'), href: "#practical" },
+    { title: t('examPreparation'), href: "#exam-prep" },
   ];
 
   return (
@@ -46,18 +49,18 @@ const Home = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center space-x-6">
+            <nav className="hidden lg:flex items-center space-x-4">
               <NavigationMenu>
                 <NavigationMenuList className="space-x-1">
                   <NavigationMenuItem>
                     <Link to="/" className="px-4 py-2 text-sm font-medium hover:text-primary transition-colors">
-                      Home
+                      {t('home')}
                     </Link>
                   </NavigationMenuItem>
 
                   <NavigationMenuItem>
                     <NavigationMenuTrigger className="bg-transparent">
-                      The Driving School
+                      {t('theDrivingSchool')}
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
                       <ul className="grid w-[400px] gap-3 p-4">
@@ -79,13 +82,13 @@ const Home = () => {
 
                   <NavigationMenuItem>
                     <Link to="#license" className="px-4 py-2 text-sm font-medium hover:text-primary transition-colors">
-                      Driving License
+                      {t('drivingLicense')}
                     </Link>
                   </NavigationMenuItem>
 
                   <NavigationMenuItem>
                     <NavigationMenuTrigger className="bg-transparent">
-                      Courses & Dates
+                      {t('coursesAndDates')}
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
                       <ul className="grid w-[400px] gap-3 p-4">
@@ -107,30 +110,32 @@ const Home = () => {
 
                   <NavigationMenuItem>
                     <Link to="#prices" className="px-4 py-2 text-sm font-medium hover:text-primary transition-colors">
-                      Prices
+                      {t('prices')}
                     </Link>
                   </NavigationMenuItem>
 
                   <NavigationMenuItem>
                     <Link to="#locations" className="px-4 py-2 text-sm font-medium hover:text-primary transition-colors">
-                      Locations
+                      {t('locations')}
                     </Link>
                   </NavigationMenuItem>
 
                   <NavigationMenuItem>
                     <Link to="#contact" className="px-4 py-2 text-sm font-medium hover:text-primary transition-colors">
-                      Contact
+                      {t('contact')}
                     </Link>
                   </NavigationMenuItem>
                 </NavigationMenuList>
               </NavigationMenu>
 
-              <Button asChild className="ml-4 bg-primary hover:bg-primary/90">
-                <Link to="#register">Online Registration</Link>
+              <LanguageToggle />
+
+              <Button asChild className="bg-primary hover:bg-primary/90">
+                <Link to="#register">{t('onlineRegistration')}</Link>
               </Button>
 
               <Button asChild variant="outline">
-                <Link to="/login">Login</Link>
+                <Link to="/login">{t('login')}</Link>
               </Button>
             </nav>
 
@@ -143,12 +148,16 @@ const Home = () => {
               </SheetTrigger>
               <SheetContent side="right" className="w-[300px] sm:w-[400px]">
                 <nav className="flex flex-col space-y-4 mt-8">
+                  <div className="flex justify-end mb-4">
+                    <LanguageToggle />
+                  </div>
+
                   <Link to="/" className="text-lg font-medium hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
-                    Home
+                    {t('home')}
                   </Link>
 
                   <div className="space-y-2">
-                    <div className="text-lg font-medium">The Driving School</div>
+                    <div className="text-lg font-medium">{t('theDrivingSchool')}</div>
                     {drivingSchoolLinks.map((link) => (
                       <a
                         key={link.title}
@@ -162,11 +171,11 @@ const Home = () => {
                   </div>
 
                   <Link to="#license" className="text-lg font-medium hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
-                    Driving License
+                    {t('drivingLicense')}
                   </Link>
 
                   <div className="space-y-2">
-                    <div className="text-lg font-medium">Courses & Dates</div>
+                    <div className="text-lg font-medium">{t('coursesAndDates')}</div>
                     {coursesLinks.map((link) => (
                       <a
                         key={link.title}
@@ -180,23 +189,23 @@ const Home = () => {
                   </div>
 
                   <Link to="#prices" className="text-lg font-medium hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
-                    Prices
+                    {t('prices')}
                   </Link>
 
                   <Link to="#locations" className="text-lg font-medium hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
-                    Locations
+                    {t('locations')}
                   </Link>
 
                   <Link to="#contact" className="text-lg font-medium hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
-                    Contact
+                    {t('contact')}
                   </Link>
 
                   <Button asChild className="w-full bg-primary hover:bg-primary/90">
-                    <Link to="#register" onClick={() => setMobileMenuOpen(false)}>Online Registration</Link>
+                    <Link to="#register" onClick={() => setMobileMenuOpen(false)}>{t('onlineRegistration')}</Link>
                   </Button>
 
                   <Button asChild variant="outline" className="w-full">
-                    <Link to="/login" onClick={() => setMobileMenuOpen(false)}>Login</Link>
+                    <Link to="/login" onClick={() => setMobileMenuOpen(false)}>{t('login')}</Link>
                   </Button>
                 </nav>
               </SheetContent>
@@ -211,21 +220,20 @@ const Home = () => {
         <div className="container mx-auto px-4 lg:px-8 relative z-10">
           <div className="max-w-4xl mx-auto text-center space-y-8 animate-fade-in">
             <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight">
-              Your Journey to a
+              {t('heroTitle1')}
               <span className="block bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
-                Driver's License
+                {t('heroTitle2')}
               </span>
             </h1>
             <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
-              Modern driving education with experienced instructors and flexible course schedules. 
-              Start your driving journey today with ByteTechnik Fahrschule.
+              {t('heroDescription')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Button asChild size="lg" className="text-lg px-8 bg-primary hover:bg-primary/90">
-                <Link to="#register">Get Started Now</Link>
+                <Link to="#register">{t('getStartedNow')}</Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="text-lg px-8">
-                <Link to="#contact">Contact Us</Link>
+                <Link to="#contact">{t('contactUs')}</Link>
               </Button>
             </div>
           </div>
@@ -242,9 +250,9 @@ const Home = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Expert Instructors</h3>
+              <h3 className="text-xl font-semibold mb-2">{t('expertInstructors')}</h3>
               <p className="text-muted-foreground">
-                Learn from certified professionals with years of teaching experience
+                {t('expertInstructorsDesc')}
               </p>
             </div>
 
@@ -254,9 +262,9 @@ const Home = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Flexible Schedules</h3>
+              <h3 className="text-xl font-semibold mb-2">{t('flexibleSchedules')}</h3>
               <p className="text-muted-foreground">
-                Choose from morning, evening, and weekend classes that fit your lifestyle
+                {t('flexibleSchedulesDesc')}
               </p>
             </div>
 
@@ -266,9 +274,9 @@ const Home = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2">High Success Rate</h3>
+              <h3 className="text-xl font-semibold mb-2">{t('highSuccessRate')}</h3>
               <p className="text-muted-foreground">
-                95% of our students pass their driving test on the first attempt
+                {t('highSuccessRateDesc')}
               </p>
             </div>
           </div>
@@ -284,10 +292,10 @@ const Home = () => {
               <span className="text-lg font-semibold">ByteTechnik Fahrschule</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              © 2024 ByteTechnik Fahrschule Management System. All rights reserved.
+              {t('footerCopyright')}
             </p>
             <p className="text-sm text-muted-foreground">
-              Developed by ByteTechnik
+              {t('developedBy')}
             </p>
           </div>
         </div>
