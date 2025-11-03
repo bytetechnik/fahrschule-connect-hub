@@ -19,7 +19,7 @@ const Home = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t } = useLanguage();
 
-  const drivingSchoolLinks = [
+  const aboutLinks = [
     { title: t('ourStory'), href: "#story" },
     { title: t('ourInstructors'), href: "#instructors" },
     { title: t('ourLocations'), href: "#our-locations" },
@@ -27,11 +27,12 @@ const Home = () => {
   ];
 
   const coursesLinks = [
-    { title: t('currentDates'), href: "#dates" },
-    { title: t('intensiveHolidayCourses'), href: "#intensive" },
+    { title: t('drivingLicense'), href: "#license" },
     { title: t('theoryLessonsMenu'), href: "#theory" },
     { title: t('practicalLessonsMenu'), href: "#practical" },
+    { title: t('intensiveHolidayCourses'), href: "#intensive" },
     { title: t('examPreparation'), href: "#exam-prep" },
+    { title: t('currentDates'), href: "#dates" },
   ];
 
   return (
@@ -70,11 +71,11 @@ const Home = () => {
 
                   <NavigationMenuItem>
                     <NavigationMenuTrigger className="bg-transparent hover:bg-primary/10 data-[state=open]:bg-primary/10">
-                      {t('theDrivingSchool')}
+                      {t('about')}
                     </NavigationMenuTrigger>
                     <NavigationMenuContent className="z-50">
                       <ul className="grid w-[450px] gap-2 p-4 bg-background/95 backdrop-blur-xl border border-border/50 shadow-xl rounded-xl">
-                        {drivingSchoolLinks.map((link) => (
+                        {aboutLinks.map((link) => (
                           <li key={link.title}>
                             <NavigationMenuLink asChild>
                               <a
@@ -93,18 +94,8 @@ const Home = () => {
                   </NavigationMenuItem>
 
                   <NavigationMenuItem>
-                    <Link 
-                      to="#license" 
-                      className="px-4 py-2 text-sm font-medium rounded-lg hover:bg-primary/10 hover:text-primary transition-all duration-200 relative group"
-                    >
-                      {t('drivingLicense')}
-                      <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-primary group-hover:w-1/2 group-hover:left-1/4 transition-all duration-300"></span>
-                    </Link>
-                  </NavigationMenuItem>
-
-                  <NavigationMenuItem>
                     <NavigationMenuTrigger className="bg-transparent hover:bg-primary/10 data-[state=open]:bg-primary/10">
-                      {t('coursesAndDates')}
+                      {t('courses')}
                     </NavigationMenuTrigger>
                     <NavigationMenuContent className="z-50">
                       <ul className="grid w-[450px] gap-2 p-4 bg-background/95 backdrop-blur-xl border border-border/50 shadow-xl rounded-xl">
@@ -132,16 +123,6 @@ const Home = () => {
                       className="px-4 py-2 text-sm font-medium rounded-lg hover:bg-primary/10 hover:text-primary transition-all duration-200 relative group"
                     >
                       {t('prices')}
-                      <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-primary group-hover:w-1/2 group-hover:left-1/4 transition-all duration-300"></span>
-                    </Link>
-                  </NavigationMenuItem>
-
-                  <NavigationMenuItem>
-                    <Link 
-                      to="#locations" 
-                      className="px-4 py-2 text-sm font-medium rounded-lg hover:bg-primary/10 hover:text-primary transition-all duration-200 relative group"
-                    >
-                      {t('locations')}
                       <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-primary group-hover:w-1/2 group-hover:left-1/4 transition-all duration-300"></span>
                     </Link>
                   </NavigationMenuItem>
@@ -205,9 +186,9 @@ const Home = () => {
                     </Link>
 
                     <div className="space-y-3">
-                      <div className="text-lg font-semibold px-4 text-primary">{t('theDrivingSchool')}</div>
+                      <div className="text-lg font-semibold px-4 text-primary">{t('about')}</div>
                       <div className="space-y-1">
-                        {drivingSchoolLinks.map((link) => (
+                        {aboutLinks.map((link) => (
                           <a
                             key={link.title}
                             href={link.href}
@@ -220,16 +201,8 @@ const Home = () => {
                       </div>
                     </div>
 
-                    <Link 
-                      to="#license" 
-                      className="text-lg font-semibold hover:text-primary transition-colors px-4 py-2 hover:bg-primary/5 rounded-lg" 
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {t('drivingLicense')}
-                    </Link>
-
                     <div className="space-y-3">
-                      <div className="text-lg font-semibold px-4 text-primary">{t('coursesAndDates')}</div>
+                      <div className="text-lg font-semibold px-4 text-primary">{t('courses')}</div>
                       <div className="space-y-1">
                         {coursesLinks.map((link) => (
                           <a
@@ -250,14 +223,6 @@ const Home = () => {
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       {t('prices')}
-                    </Link>
-
-                    <Link 
-                      to="#locations" 
-                      className="text-lg font-semibold hover:text-primary transition-colors px-4 py-2 hover:bg-primary/5 rounded-lg" 
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {t('locations')}
                     </Link>
 
                     <Link 

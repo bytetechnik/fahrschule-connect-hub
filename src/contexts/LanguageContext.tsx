@@ -262,6 +262,8 @@ const translations: Record<Language, Record<string, string>> = {
     
     // Homepage
     'home': 'Startseite',
+    'about': 'Über uns',
+    'courses': 'Kurse',
     'theDrivingSchool': 'Die Fahrschule',
     'ourStory': 'Unsere Geschichte',
     'ourInstructors': 'Unsere Fahrlehrer',
@@ -543,6 +545,8 @@ const translations: Record<Language, Record<string, string>> = {
     
     // Homepage
     'home': 'Home',
+    'about': 'About',
+    'courses': 'Courses',
     'theDrivingSchool': 'The Driving School',
     'ourStory': 'Our Story',
     'ourInstructors': 'Our Instructors',
