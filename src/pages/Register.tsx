@@ -68,7 +68,7 @@ const Register = () => {
         <Card className="max-w-4xl mx-auto">
           <CardHeader>
             <CardTitle className="text-3xl">{t('onlineRegistration')}</CardTitle>
-            <CardDescription className="text-base mt-4">
+            <div className="text-base mt-4 text-muted-foreground">
               <div className="space-y-2">
                 <p className="font-semibold">{t('registrationSteps')}</p>
                 <ol className="list-decimal list-inside space-y-2 text-sm">
@@ -79,9 +79,9 @@ const Register = () => {
                   <li>{t('step5')}</li>
                   <li>{t('step6')}</li>
                 </ol>
-                <p className="text-sm mt-4 text-muted-foreground">{t('dataPrivacyNote')}</p>
+                <p className="text-sm mt-4">{t('dataPrivacyNote')}</p>
               </div>
-            </CardDescription>
+            </div>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-8">
