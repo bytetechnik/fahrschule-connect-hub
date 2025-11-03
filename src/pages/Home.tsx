@@ -147,7 +147,7 @@ const Home = () => {
                 asChild 
                 className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 hover:scale-105"
               >
-                <Link to="#register" className="font-semibold">{t('onlineRegistration')}</Link>
+                <Link to="/register" className="font-semibold">{t('onlineRegistration')}</Link>
               </Button>
 
               <Button 
@@ -238,7 +238,7 @@ const Home = () => {
                         asChild 
                         className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all duration-300"
                       >
-                        <Link to="#register" onClick={() => setMobileMenuOpen(false)}>
+                         <Link to="/register" onClick={() => setMobileMenuOpen(false)}>
                           {t('onlineRegistration')}
                         </Link>
                       </Button>
@@ -277,7 +277,7 @@ const Home = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Button asChild size="lg" className="text-lg px-8 bg-primary hover:bg-primary/90">
-                <Link to="#register">{t('getStartedNow')}</Link>
+                <Link to="/register">{t('getStartedNow')}</Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="text-lg px-8">
                 <Link to="#contact">{t('contactUs')}</Link>
@@ -339,7 +339,7 @@ const Home = () => {
               <span className="text-lg font-semibold">ByteTechnik Fahrschule</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              {t('footerCopyright')}
+              © {new Date().getFullYear()} {t('footerCopyright')}
             </p>
             <p className="text-sm text-muted-foreground">
               {t('developedBy')}
