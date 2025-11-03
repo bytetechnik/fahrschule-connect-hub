@@ -176,9 +176,9 @@ const Home = () => {
                 </SheetTrigger>
                 <SheetContent 
                   side="right" 
-                  className="w-[320px] sm:w-[400px] bg-background/95 backdrop-blur-xl border-l border-border/50"
+                  className="w-[320px] sm:w-[400px] bg-background/95 backdrop-blur-xl border-l border-border/50 h-[100dvh] overflow-y-auto"
                 >
-                  <nav className="flex flex-col space-y-6 mt-12">
+                  <nav className="flex flex-col space-y-6 mt-12 pb-8">
                     <Link 
                       to="/" 
                       className="text-lg font-semibold hover:text-primary transition-colors px-4 py-2 hover:bg-primary/5 rounded-lg" 
