@@ -3,7 +3,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { LanguageToggle } from './LanguageToggle';
 import { Button } from './ui/button';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import { 
   LayoutDashboard, 
@@ -45,22 +44,10 @@ export const Layout = ({ children }: LayoutProps) => {
           { path: `${baseRoute}/dashboard`, icon: LayoutDashboard, label: t('dashboard') },
           { path: `${baseRoute}/students`, icon: Users, label: t('students') },
           { path: `${baseRoute}/teachers`, icon: UserCog, label: t('teachers') },
-          {
-            icon: BookOpen,
-            label: t('lessons'),
-            children: [
-              { path: `${baseRoute}/lessons`, label: t('lessons') },
-              { path: `${baseRoute}/practical-lessons`, label: t('practicalLessons') },
-            ],
-          },
-          {
-            icon: CalendarDays,
-            label: t('calendar'),
-            children: [
-              { path: `${baseRoute}/calendar`, label: t('calendar') },
-              { path: `${baseRoute}/appointments`, label: t('appointments') },
-            ],
-          },
+          { path: `${baseRoute}/lessons`, icon: BookOpen, label: t('lessons') },
+          { path: `${baseRoute}/practical-lessons`, icon: BookOpen, label: t('practicalLessons') },
+          { path: `${baseRoute}/calendar`, icon: CalendarDays, label: t('calendar') },
+          { path: `${baseRoute}/appointments`, icon: CalendarDays, label: t('appointments') },
           { path: `${baseRoute}/payments`, icon: CreditCard, label: t('payments') },
           { path: `${baseRoute}/shop`, icon: ShoppingBag, label: t('shop') },
         ];
@@ -68,41 +55,17 @@ export const Layout = ({ children }: LayoutProps) => {
         return [
           { path: `${baseRoute}/dashboard`, icon: LayoutDashboard, label: t('dashboard') },
           { path: `${baseRoute}/students`, icon: Users, label: t('students') },
-          {
-            icon: BookOpen,
-            label: t('lessons'),
-            children: [
-              { path: `${baseRoute}/practical-lessons`, label: t('practicalLessons') },
-            ],
-          },
-          {
-            icon: CalendarDays,
-            label: t('calendar'),
-            children: [
-              { path: `${baseRoute}/calendar`, label: t('calendar') },
-              { path: `${baseRoute}/appointments`, label: t('appointments') },
-            ],
-          },
+          { path: `${baseRoute}/practical-lessons`, icon: BookOpen, label: t('practicalLessons') },
+          { path: `${baseRoute}/calendar`, icon: CalendarDays, label: t('calendar') },
+          { path: `${baseRoute}/appointments`, icon: CalendarDays, label: t('appointments') },
         ];
       case 'student':
         return [
           { path: `${baseRoute}/dashboard`, icon: LayoutDashboard, label: t('dashboard') },
-          {
-            icon: BookOpen,
-            label: t('lessons'),
-            children: [
-              { path: `${baseRoute}/lessons`, label: t('lessons') },
-              { path: `${baseRoute}/practical-lessons`, label: t('practicalLessons') },
-            ],
-          },
-          {
-            icon: CalendarDays,
-            label: t('calendar'),
-            children: [
-              { path: `${baseRoute}/calendar`, label: t('calendar') },
-              { path: `${baseRoute}/appointments`, label: t('appointments') },
-            ],
-          },
+          { path: `${baseRoute}/lessons`, icon: BookOpen, label: t('lessons') },
+          { path: `${baseRoute}/practical-lessons`, icon: BookOpen, label: t('practicalLessons') },
+          { path: `${baseRoute}/calendar`, icon: CalendarDays, label: t('calendar') },
+          { path: `${baseRoute}/appointments`, icon: CalendarDays, label: t('appointments') },
           { path: `${baseRoute}/payments`, icon: CreditCard, label: t('payments') },
           { path: `${baseRoute}/shop`, icon: ShoppingBag, label: t('shop') },
         ];
@@ -115,47 +78,18 @@ export const Layout = ({ children }: LayoutProps) => {
 
   const NavItems = () => (
     <nav className="space-y-2">
-      <Accordion type="multiple" className="w-full">
-        {navItems.map((item, idx) => {
-          const Icon = item.icon;
-          if (item.children && item.children.length > 0) {
-            const value = `${item.label}-${idx}`;
-            return (
-              <AccordionItem key={value} value={value} className="border-0">
-                <AccordionTrigger className="py-1">
-                  <div className="flex items-center gap-3">
-                    <Icon className="h-5 w-5" />
-                    <span>{item.label}</span>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="pl-8 space-y-1">
-                    {item.children.map((child) => {
-                      const isActive = location.pathname === child.path;
-                      return (
-                        <Link key={child.path} to={child.path} onClick={() => setMobileMenuOpen(false)}>
-                          <Button variant={isActive ? 'default' : 'ghost'} className="w-full justify-start">
-                            {child.label}
-                          </Button>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            );
-          }
-          const isActive = location.pathname === item.path;
-          return (
-            <Link key={(item.path || item.label) as string} to={item.path as string} onClick={() => setMobileMenuOpen(false)}>
-              <Button variant={isActive ? 'default' : 'ghost'} className="w-full justify-start gap-3">
-                <Icon className="h-5 w-5" />
-                {item.label}
-              </Button>
-            </Link>
-          );
-        })}
-      </Accordion>
+      {navItems.map((item) => {
+        const Icon = item.icon;
+        const isActive = location.pathname === item.path;
+        return (
+          <Link key={(item.path || item.label) as string} to={item.path as string} onClick={() => setMobileMenuOpen(false)}>
+            <Button variant={isActive ? 'default' : 'ghost'} className="w-full justify-start gap-3">
+              <Icon className="h-5 w-5" />
+              {item.label}
+            </Button>
+          </Link>
+        );
+      })}
     </nav>
   );
 
