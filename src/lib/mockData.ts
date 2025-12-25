@@ -1485,3 +1485,189 @@ export const getPracticalLessonRecordsByDate = (date: string, teacherId?: string
     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 };
+
+// Notifications
+export interface Notification {
+  id: string;
+  userId: string;
+  title: string;
+  titleEn: string;
+  message: string;
+  messageEn: string;
+  type: 'info' | 'warning' | 'success' | 'reminder';
+  read: boolean;
+  createdAt: string;
+}
+
+export const mockNotifications: Notification[] = [
+  { id: 'notif-1', userId: 'student-1', title: 'Theorie Prüfung bald', titleEn: 'Theory Exam Soon', message: 'Deine Theorieprüfung ist in 5 Tagen geplant.', messageEn: 'Your theory exam is scheduled in 5 days.', type: 'reminder', read: false, createdAt: '2025-12-24T10:00:00Z' },
+  { id: 'notif-2', userId: 'student-1', title: 'Lektion abgeschlossen', titleEn: 'Lesson Completed', message: 'Du hast Lektion 8 erfolgreich abgeschlossen!', messageEn: 'You successfully completed lesson 8!', type: 'success', read: true, createdAt: '2025-12-23T14:30:00Z' },
+  { id: 'notif-3', userId: 'student-2', title: 'Neuer Termin', titleEn: 'New Appointment', message: 'Ein neuer Fahrstundentermin wurde für dich gebucht.', messageEn: 'A new driving lesson appointment has been booked for you.', type: 'info', read: false, createdAt: '2025-12-24T08:00:00Z' },
+  { id: 'notif-4', userId: 'teacher-1', title: 'Neuer Schüler', titleEn: 'New Student', message: 'Ein neuer Schüler wurde dir zugewiesen.', messageEn: 'A new student has been assigned to you.', type: 'info', read: false, createdAt: '2025-12-23T09:00:00Z' },
+  { id: 'notif-5', userId: 'admin', title: 'Systemwartung', titleEn: 'System Maintenance', message: 'Geplante Wartung am 28. Dezember.', messageEn: 'Scheduled maintenance on December 28th.', type: 'warning', read: false, createdAt: '2025-12-22T12:00:00Z' },
+];
+
+export const getNotificationsByUser = (userId: string): Notification[] => {
+  return mockNotifications.filter(n => n.userId === userId || n.userId === 'all').sort((a, b) => 
+    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+};
+
+// Announcements
+export interface Announcement {
+  id: string;
+  title: string;
+  titleEn: string;
+  content: string;
+  contentEn: string;
+  priority: 'low' | 'medium' | 'high';
+  targetAudience: 'all' | 'students' | 'teachers';
+  createdAt: string;
+  expiresAt?: string;
+}
+
+export const mockAnnouncements: Announcement[] = [
+  { id: 'ann-1', title: 'Weihnachtsferien', titleEn: 'Christmas Holidays', content: 'Die Fahrschule ist vom 24.12 bis 01.01 geschlossen.', contentEn: 'The driving school is closed from Dec 24 to Jan 1.', priority: 'high', targetAudience: 'all', createdAt: '2025-12-20T10:00:00Z', expiresAt: '2026-01-02T00:00:00Z' },
+  { id: 'ann-2', title: 'Neue Theorie-Videos', titleEn: 'New Theory Videos', content: 'Wir haben neue interaktive Theorie-Videos hinzugefügt!', contentEn: 'We have added new interactive theory videos!', priority: 'medium', targetAudience: 'students', createdAt: '2025-12-18T14:00:00Z' },
+  { id: 'ann-3', title: 'Lehrermeeting', titleEn: 'Teacher Meeting', content: 'Monatliches Meeting am 27.12 um 9:00 Uhr.', contentEn: 'Monthly meeting on Dec 27 at 9:00 AM.', priority: 'medium', targetAudience: 'teachers', createdAt: '2025-12-21T11:00:00Z' },
+];
+
+export const getAnnouncementsByAudience = (audience: 'students' | 'teachers' | 'all'): Announcement[] => {
+  const now = new Date();
+  return mockAnnouncements.filter(a => 
+    (a.targetAudience === 'all' || a.targetAudience === audience) &&
+    (!a.expiresAt || new Date(a.expiresAt) > now)
+  ).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+};
+
+// Student Achievements
+export interface Achievement {
+  id: string;
+  studentId: string;
+  type: 'first-lesson' | 'theory-complete' | 'halfway' | 'exam-ready' | 'night-drive' | 'highway-drive' | 'perfect-week';
+  title: string;
+  titleEn: string;
+  description: string;
+  descriptionEn: string;
+  earnedAt: string;
+  icon: string;
+}
+
+export const mockAchievements: Achievement[] = [
+  { id: 'ach-1', studentId: 'student-1', type: 'theory-complete', title: 'Theorie-Meister', titleEn: 'Theory Master', description: 'Alle Theoriestunden abgeschlossen', descriptionEn: 'Completed all theory lessons', earnedAt: '2025-12-15T10:00:00Z', icon: '🎓' },
+  { id: 'ach-2', studentId: 'student-1', type: 'highway-drive', title: 'Autobahn-Profi', titleEn: 'Highway Pro', description: 'Erste Autobahnfahrt gemeistert', descriptionEn: 'Mastered first highway drive', earnedAt: '2025-12-10T14:00:00Z', icon: '🛣️' },
+  { id: 'ach-3', studentId: 'student-2', type: 'first-lesson', title: 'Erster Schritt', titleEn: 'First Step', description: 'Erste Fahrstunde absolviert', descriptionEn: 'Completed first driving lesson', earnedAt: '2025-11-20T09:00:00Z', icon: '🚗' },
+  { id: 'ach-4', studentId: 'student-3', type: 'halfway', title: 'Halbzeit!', titleEn: 'Halfway There!', description: '50% des Kurses abgeschlossen', descriptionEn: 'Completed 50% of the course', earnedAt: '2025-12-05T16:00:00Z', icon: '⭐' },
+  { id: 'ach-5', studentId: 'student-1', type: 'night-drive', title: 'Nachtfahrer', titleEn: 'Night Driver', description: 'Erste Nachtfahrt absolviert', descriptionEn: 'Completed first night drive', earnedAt: '2025-12-08T20:00:00Z', icon: '🌙' },
+];
+
+export const getAchievementsByStudent = (studentId: string): Achievement[] => {
+  return mockAchievements.filter(a => a.studentId === studentId).sort((a, b) => 
+    new Date(b.earnedAt).getTime() - new Date(a.earnedAt).getTime()
+  );
+};
+
+// Activity Log
+export interface ActivityLog {
+  id: string;
+  userId: string;
+  userType: 'admin' | 'teacher' | 'student';
+  action: string;
+  actionEn: string;
+  details: string;
+  detailsEn: string;
+  createdAt: string;
+}
+
+export const mockActivityLogs: ActivityLog[] = [
+  { id: 'log-1', userId: 'admin', userType: 'admin', action: 'Schüler hinzugefügt', actionEn: 'Added Student', details: 'Neuer Schüler Leon Becker registriert', detailsEn: 'New student Leon Becker registered', createdAt: '2025-12-24T11:30:00Z' },
+  { id: 'log-2', userId: 'teacher-1', userType: 'teacher', action: 'Fahrstunde abgeschlossen', actionEn: 'Completed Lesson', details: 'Fahrstunde mit Anna Schmidt', detailsEn: 'Driving lesson with Anna Schmidt', createdAt: '2025-12-24T10:00:00Z' },
+  { id: 'log-3', userId: 'student-1', userType: 'student', action: 'Theorie abgeschlossen', actionEn: 'Completed Theory', details: 'Lektion 14 abgeschlossen', detailsEn: 'Completed lesson 14', createdAt: '2025-12-23T15:00:00Z' },
+  { id: 'log-4', userId: 'admin', userType: 'admin', action: 'Zahlung verarbeitet', actionEn: 'Payment Processed', details: 'Zahlung von Lucas Weber erhalten', detailsEn: 'Payment received from Lucas Weber', createdAt: '2025-12-23T09:00:00Z' },
+  { id: 'log-5', userId: 'teacher-2', userType: 'teacher', action: 'Termin erstellt', actionEn: 'Appointment Created', details: 'Neuer Termin mit Emma Meyer', detailsEn: 'New appointment with Emma Meyer', createdAt: '2025-12-22T14:00:00Z' },
+  { id: 'log-6', userId: 'admin', userType: 'admin', action: 'Lehrer aktiviert', actionEn: 'Teacher Activated', details: 'Thomas Bauer als aktiv markiert', detailsEn: 'Thomas Bauer marked as active', createdAt: '2025-12-22T08:00:00Z' },
+];
+
+export const getRecentActivityLogs = (limit: number = 10): ActivityLog[] => {
+  return mockActivityLogs.slice(0, limit).sort((a, b) => 
+    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+};
+
+// Revenue data for charts
+export interface RevenueData {
+  month: string;
+  monthEn: string;
+  revenue: number;
+  students: number;
+}
+
+export const mockRevenueData: RevenueData[] = [
+  { month: 'Jan', monthEn: 'Jan', revenue: 12500, students: 15 },
+  { month: 'Feb', monthEn: 'Feb', revenue: 14200, students: 18 },
+  { month: 'Mär', monthEn: 'Mar', revenue: 15800, students: 20 },
+  { month: 'Apr', monthEn: 'Apr', revenue: 13600, students: 17 },
+  { month: 'Mai', monthEn: 'May', revenue: 16400, students: 22 },
+  { month: 'Jun', monthEn: 'Jun', revenue: 18200, students: 25 },
+  { month: 'Jul', monthEn: 'Jul', revenue: 17500, students: 23 },
+  { month: 'Aug', monthEn: 'Aug', revenue: 14800, students: 19 },
+  { month: 'Sep', monthEn: 'Sep', revenue: 19200, students: 28 },
+  { month: 'Okt', monthEn: 'Oct', revenue: 21500, students: 32 },
+  { month: 'Nov', monthEn: 'Nov', revenue: 18900, students: 26 },
+  { month: 'Dez', monthEn: 'Dec', revenue: 16700, students: 21 },
+];
+
+// Weekly progress for students
+export interface WeeklyProgress {
+  week: string;
+  theoryHours: number;
+  practicalHours: number;
+}
+
+export const getWeeklyProgressByStudent = (studentId: string): WeeklyProgress[] => {
+  // Generate dummy weekly progress data
+  const weeks = ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8'];
+  return weeks.map((week, idx) => ({
+    week,
+    theoryHours: Math.floor(Math.random() * 4) + 1,
+    practicalHours: Math.floor(Math.random() * 3) + (idx > 3 ? 2 : 0),
+  }));
+};
+
+// Teacher performance metrics
+export interface TeacherMetrics {
+  teacherId: string;
+  totalLessonsGiven: number;
+  averageRating: number;
+  passRate: number;
+  activeStudents: number;
+}
+
+export const getTeacherMetrics = (teacherId: string): TeacherMetrics => {
+  const activeStudents = mockStudents.filter(s => s.teacherId === teacherId).length;
+  return {
+    teacherId,
+    totalLessonsGiven: Math.floor(Math.random() * 200) + 100,
+    averageRating: parseFloat((4 + Math.random()).toFixed(1)),
+    passRate: Math.floor(Math.random() * 15) + 85,
+    activeStudents,
+  };
+};
+
+// Upcoming exams
+export interface UpcomingExam {
+  id: string;
+  studentId: string;
+  studentName: string;
+  type: 'theory' | 'practical';
+  date: string;
+  time: string;
+  status: 'scheduled' | 'passed' | 'failed';
+}
+
+export const mockUpcomingExams: UpcomingExam[] = [
+  { id: 'exam-1', studentId: 'student-1', studentName: 'Anna Schmidt', type: 'practical', date: '2025-12-28', time: '09:00', status: 'scheduled' },
+  { id: 'exam-2', studentId: 'student-2', studentName: 'Lucas Weber', type: 'theory', date: '2025-12-30', time: '10:30', status: 'scheduled' },
+  { id: 'exam-3', studentId: 'student-3', studentName: 'Emma Meyer', type: 'theory', date: '2026-01-05', time: '11:00', status: 'scheduled' },
+  { id: 'exam-4', studentId: 'student-4', studentName: 'Noah Wagner', type: 'theory', date: '2026-01-08', time: '14:00', status: 'scheduled' },
+];
