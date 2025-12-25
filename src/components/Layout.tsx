@@ -1,9 +1,10 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { LanguageToggle } from './LanguageToggle';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
+import { Badge } from './ui/badge';
 import { 
   LayoutDashboard, 
   BookOpen, 
@@ -16,11 +17,13 @@ import {
   ShoppingBag,
   Menu,
   CarFront,
-  MessageSquare
+  MessageSquare,
+  Bell
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import logo from '@/assets/bt_logo.png';
 import { APP_NAME } from '@/constants';
+import { getUnreadMessageCount } from '@/lib/mockData';
 
 interface LayoutProps {
   children: ReactNode;
@@ -31,6 +34,35 @@ export const Layout = ({ children }: LayoutProps) => {
   const { t } = useLanguage();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  // Update unread count periodically and on route change
+  useEffect(() => {
+    if (!user) return;
+    
+    const updateUnreadCount = () => {
+      const count = getUnreadMessageCount(user.id);
+      setUnreadCount(count);
+    };
+
+    updateUnreadCount();
+    
+    // Poll for new messages every 5 seconds (simulating real-time)
+    const interval = setInterval(updateUnreadCount, 5000);
+    
+    // Also update on storage events (for cross-tab sync)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'mockMessages' || e.key === 'mockConversations') {
+        updateUnreadCount();
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [user, location.pathname]);
 
   if (!user) return null;
 
@@ -125,6 +157,20 @@ export const Layout = ({ children }: LayoutProps) => {
               </div>
             </div>
             <div className="flex items-center gap-2 md:gap-4 shrink-0">
+              {/* Notification Bell with Badge */}
+              <Link to={`/${user.role}/messages`} className="relative">
+                <Button variant="ghost" size="icon" className="relative">
+                  <Bell className="h-5 w-5" />
+                  {unreadCount > 0 && (
+                    <Badge 
+                      variant="destructive" 
+                      className="absolute -top-1 -right-1 h-5 min-w-5 px-1 flex items-center justify-center text-xs"
+                    >
+                      {unreadCount > 99 ? '99+' : unreadCount}
+                    </Badge>
+                  )}
+                </Button>
+              </Link>
               <LanguageToggle />
               <Button variant="outline" size="sm" onClick={logout} className="gap-2">
                 <LogOut className="h-4 w-4" />
