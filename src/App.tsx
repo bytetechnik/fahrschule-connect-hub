@@ -19,11 +19,14 @@ import AdminCalendar from "./pages/admin/Calendar";
 import AdminPayments from "./pages/admin/Payments";
 import AdminShop from "./pages/admin/Shop";
 import AdminPracticalLessons from "./pages/admin/PracticalLessons";
+import AdminMessages from "./pages/admin/Messages";
 import TeacherDashboard from "./pages/teacher/Dashboard";
 import TeacherStudents from "./pages/teacher/Students";
 import TeacherCalendar from "./pages/teacher/Calendar";
 import TeacherAppointments from "./pages/teacher/Appointments";
 import TeacherPracticalLessons from "./pages/teacher/PracticalLessons";
+import TeacherPayments from "./pages/teacher/Payments";
+import TeacherMessages from "./pages/teacher/Messages";
 import StudentDashboard from "./pages/student/Dashboard";
 import StudentLessons from "./pages/student/Lessons";
 import StudentLessonDetail from "./pages/student/LessonDetail";
@@ -32,6 +35,7 @@ import StudentAppointments from "./pages/student/Appointments";
 import StudentPayments from "./pages/student/Payments";
 import StudentShop from "./pages/student/Shop";
 import StudentPracticalLessons from "./pages/student/PracticalLessons";
+import StudentMessages from "./pages/student/Messages";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -59,12 +63,15 @@ const App = () => (
               <Route path="/admin/payments" element={<ProtectedRoute allowedRoles={['admin']}><AdminPayments /></ProtectedRoute>} />
               <Route path="/admin/shop" element={<ProtectedRoute allowedRoles={['admin']}><AdminShop /></ProtectedRoute>} />
               <Route path="/admin/practical-lessons" element={<ProtectedRoute allowedRoles={['admin']}><AdminPracticalLessons /></ProtectedRoute>} />
+              <Route path="/admin/messages" element={<ProtectedRoute allowedRoles={['admin']}><AdminMessages /></ProtectedRoute>} />
               
               <Route path="/teacher/dashboard" element={<ProtectedRoute allowedRoles={['teacher']}><TeacherDashboard /></ProtectedRoute>} />
               <Route path="/teacher/students" element={<ProtectedRoute allowedRoles={['teacher']}><TeacherStudents /></ProtectedRoute>} />
               <Route path="/teacher/calendar" element={<ProtectedRoute allowedRoles={['teacher']}><TeacherCalendar /></ProtectedRoute>} />
               <Route path="/teacher/appointments" element={<ProtectedRoute allowedRoles={['teacher']}><TeacherAppointments /></ProtectedRoute>} />
               <Route path="/teacher/practical-lessons" element={<ProtectedRoute allowedRoles={['teacher']}><TeacherPracticalLessons /></ProtectedRoute>} />
+              <Route path="/teacher/payments" element={<ProtectedRoute allowedRoles={['teacher']}><TeacherPayments /></ProtectedRoute>} />
+              <Route path="/teacher/messages" element={<ProtectedRoute allowedRoles={['teacher']}><TeacherMessages /></ProtectedRoute>} />
               
               <Route path="/student/dashboard" element={<ProtectedRoute allowedRoles={['student']}><StudentDashboard /></ProtectedRoute>} />
               <Route path="/student/lessons" element={<ProtectedRoute allowedRoles={['student']}><StudentLessons /></ProtectedRoute>} />
@@ -74,6 +81,7 @@ const App = () => (
               <Route path="/student/payments" element={<ProtectedRoute allowedRoles={['student']}><StudentPayments /></ProtectedRoute>} />
               <Route path="/student/shop" element={<ProtectedRoute allowedRoles={['student']}><StudentShop /></ProtectedRoute>} />
               <Route path="/student/practical-lessons" element={<ProtectedRoute allowedRoles={['student']}><StudentPracticalLessons /></ProtectedRoute>} />
+              <Route path="/student/messages" element={<ProtectedRoute allowedRoles={['student']}><StudentMessages /></ProtectedRoute>} />
               
                 <Route path="*" element={<NotFound />} />
               </Routes>

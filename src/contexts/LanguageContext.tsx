@@ -372,6 +372,18 @@ const translations: Record<Language, Record<string, string>> = {
     'scheduleExam': 'Prüfung planen',
     'createLesson': 'Stunde erstellen',
     'viewReports': 'Berichte anzeigen',
+    
+    // Messaging
+    'messages': 'Nachrichten',
+    'newMessage': 'Neue Nachricht',
+    'sendMessage': 'Senden',
+    'typeMessage': 'Nachricht eingeben...',
+    'noMessages': 'Keine Nachrichten',
+    'noConversations': 'Keine Konversationen',
+    'selectConversation': 'Wählen Sie eine Konversation',
+    'startConversation': 'Neue Konversation starten',
+    'selectRecipient': 'Empfänger auswählen',
+    'messageSent': 'Nachricht gesendet',
   },
   en: {
     // Auth
@@ -734,6 +746,18 @@ const translations: Record<Language, Record<string, string>> = {
     'scheduleExam': 'Schedule Exam',
     'createLesson': 'Create Lesson',
     'viewReports': 'View Reports',
+    
+    // Messaging
+    'messages': 'Messages',
+    'newMessage': 'New Message',
+    'sendMessage': 'Send',
+    'typeMessage': 'Type a message...',
+    'noMessages': 'No messages',
+    'noConversations': 'No conversations',
+    'selectConversation': 'Select a conversation',
+    'startConversation': 'Start new conversation',
+    'selectRecipient': 'Select recipient',
+    'messageSent': 'Message sent',
   }
 };
 

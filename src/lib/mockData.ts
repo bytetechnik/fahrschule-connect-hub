@@ -1671,3 +1671,187 @@ export const mockUpcomingExams: UpcomingExam[] = [
   { id: 'exam-3', studentId: 'student-3', studentName: 'Emma Meyer', type: 'theory', date: '2026-01-05', time: '11:00', status: 'scheduled' },
   { id: 'exam-4', studentId: 'student-4', studentName: 'Noah Wagner', type: 'theory', date: '2026-01-08', time: '14:00', status: 'scheduled' },
 ];
+
+// Messaging System
+export interface Conversation {
+  id: string;
+  participants: string[];
+  lastMessage: string;
+  lastMessageAt: string;
+  unreadCount: number;
+}
+
+export interface Message {
+  id: string;
+  conversationId: string;
+  senderId: string;
+  senderName: string;
+  content: string;
+  createdAt: string;
+  read: boolean;
+}
+
+const MESSAGES_STORAGE_KEY = 'fahrschule_messages';
+const CONVERSATIONS_STORAGE_KEY = 'fahrschule_conversations';
+
+export const mockConversations: Conversation[] = [
+  { id: 'conv-1', participants: ['admin', 'teacher-1'], lastMessage: 'Bitte den Stundenplan für nächste Woche aktualisieren.', lastMessageAt: '2025-12-24T10:30:00Z', unreadCount: 1 },
+  { id: 'conv-2', participants: ['admin', 'student-1'], lastMessage: 'Ihre Prüfung wurde bestätigt.', lastMessageAt: '2025-12-24T09:15:00Z', unreadCount: 0 },
+  { id: 'conv-3', participants: ['teacher-1', 'student-1'], lastMessage: 'Wie war die letzte Fahrstunde?', lastMessageAt: '2025-12-23T16:00:00Z', unreadCount: 2 },
+  { id: 'conv-4', participants: ['teacher-1', 'student-2'], lastMessage: 'Termin für morgen bestätigt.', lastMessageAt: '2025-12-23T14:30:00Z', unreadCount: 0 },
+  { id: 'conv-5', participants: ['admin', 'teacher-2'], lastMessage: 'Neuer Schüler wurde Ihnen zugewiesen.', lastMessageAt: '2025-12-22T11:00:00Z', unreadCount: 1 },
+  { id: 'conv-6', participants: ['teacher-2', 'student-3'], lastMessage: 'Gut gemacht bei der Theoriestunde!', lastMessageAt: '2025-12-22T15:45:00Z', unreadCount: 0 },
+];
+
+export const mockMessages: Message[] = [
+  // Conversation 1: admin <-> teacher-1
+  { id: 'msg-1', conversationId: 'conv-1', senderId: 'admin', senderName: 'Admin', content: 'Hallo Max, könnten Sie bitte den Stundenplan aktualisieren?', createdAt: '2025-12-24T10:00:00Z', read: true },
+  { id: 'msg-2', conversationId: 'conv-1', senderId: 'teacher-1', senderName: 'Max Müller', content: 'Ja, mache ich heute noch.', createdAt: '2025-12-24T10:15:00Z', read: true },
+  { id: 'msg-3', conversationId: 'conv-1', senderId: 'admin', senderName: 'Admin', content: 'Bitte den Stundenplan für nächste Woche aktualisieren.', createdAt: '2025-12-24T10:30:00Z', read: false },
+  
+  // Conversation 2: admin <-> student-1
+  { id: 'msg-4', conversationId: 'conv-2', senderId: 'student-1', senderName: 'Anna Schmidt', content: 'Wann ist meine praktische Prüfung geplant?', createdAt: '2025-12-24T09:00:00Z', read: true },
+  { id: 'msg-5', conversationId: 'conv-2', senderId: 'admin', senderName: 'Admin', content: 'Ihre Prüfung wurde bestätigt.', createdAt: '2025-12-24T09:15:00Z', read: true },
+  
+  // Conversation 3: teacher-1 <-> student-1
+  { id: 'msg-6', conversationId: 'conv-3', senderId: 'teacher-1', senderName: 'Max Müller', content: 'Guten Tag Anna, wie lief die Übung gestern?', createdAt: '2025-12-23T14:00:00Z', read: true },
+  { id: 'msg-7', conversationId: 'conv-3', senderId: 'student-1', senderName: 'Anna Schmidt', content: 'Sehr gut! Ich fühle mich sicherer beim Einparken.', createdAt: '2025-12-23T15:00:00Z', read: true },
+  { id: 'msg-8', conversationId: 'conv-3', senderId: 'teacher-1', senderName: 'Max Müller', content: 'Wie war die letzte Fahrstunde?', createdAt: '2025-12-23T16:00:00Z', read: false },
+  
+  // Conversation 4: teacher-1 <-> student-2
+  { id: 'msg-9', conversationId: 'conv-4', senderId: 'student-2', senderName: 'Lucas Weber', content: 'Können wir den Termin auf 10 Uhr verschieben?', createdAt: '2025-12-23T13:00:00Z', read: true },
+  { id: 'msg-10', conversationId: 'conv-4', senderId: 'teacher-1', senderName: 'Max Müller', content: 'Termin für morgen bestätigt.', createdAt: '2025-12-23T14:30:00Z', read: true },
+  
+  // Conversation 5: admin <-> teacher-2
+  { id: 'msg-11', conversationId: 'conv-5', senderId: 'admin', senderName: 'Admin', content: 'Neuer Schüler wurde Ihnen zugewiesen.', createdAt: '2025-12-22T11:00:00Z', read: false },
+  
+  // Conversation 6: teacher-2 <-> student-3
+  { id: 'msg-12', conversationId: 'conv-6', senderId: 'teacher-2', senderName: 'Julia Schneider', content: 'Gut gemacht bei der Theoriestunde!', createdAt: '2025-12-22T15:45:00Z', read: true },
+];
+
+const getStoredConversations = (): Conversation[] => {
+  const stored = localStorage.getItem(CONVERSATIONS_STORAGE_KEY);
+  return stored ? JSON.parse(stored) : mockConversations;
+};
+
+const saveConversations = (conversations: Conversation[]) => {
+  localStorage.setItem(CONVERSATIONS_STORAGE_KEY, JSON.stringify(conversations));
+};
+
+const getStoredMessages = (): Message[] => {
+  const stored = localStorage.getItem(MESSAGES_STORAGE_KEY);
+  return stored ? JSON.parse(stored) : mockMessages;
+};
+
+const saveMessages = (messages: Message[]) => {
+  localStorage.setItem(MESSAGES_STORAGE_KEY, JSON.stringify(messages));
+};
+
+export const getConversationsForUser = (userId: string): Conversation[] => {
+  const conversations = getStoredConversations();
+  return conversations
+    .filter(c => c.participants.includes(userId))
+    .sort((a, b) => new Date(b.lastMessageAt).getTime() - new Date(a.lastMessageAt).getTime());
+};
+
+export const getMessagesForConversation = (conversationId: string): Message[] => {
+  const messages = getStoredMessages();
+  return messages
+    .filter(m => m.conversationId === conversationId)
+    .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+};
+
+export const sendMessage = (conversationId: string, senderId: string, senderName: string, content: string): Message => {
+  const messages = getStoredMessages();
+  const conversations = getStoredConversations();
+  
+  const newMessage: Message = {
+    id: `msg-${Date.now()}`,
+    conversationId,
+    senderId,
+    senderName,
+    content,
+    createdAt: new Date().toISOString(),
+    read: false,
+  };
+  
+  messages.push(newMessage);
+  saveMessages(messages);
+  
+  // Update conversation
+  const convIndex = conversations.findIndex(c => c.id === conversationId);
+  if (convIndex !== -1) {
+    conversations[convIndex].lastMessage = content;
+    conversations[convIndex].lastMessageAt = newMessage.createdAt;
+    // Increment unread for other participants
+    const otherParticipant = conversations[convIndex].participants.find(p => p !== senderId);
+    if (otherParticipant) {
+      conversations[convIndex].unreadCount += 1;
+    }
+    saveConversations(conversations);
+  }
+  
+  return newMessage;
+};
+
+export const markConversationAsRead = (conversationId: string, userId: string) => {
+  const messages = getStoredMessages();
+  const conversations = getStoredConversations();
+  
+  // Mark messages as read
+  messages.forEach(m => {
+    if (m.conversationId === conversationId && m.senderId !== userId) {
+      m.read = true;
+    }
+  });
+  saveMessages(messages);
+  
+  // Reset unread count
+  const convIndex = conversations.findIndex(c => c.id === conversationId);
+  if (convIndex !== -1) {
+    conversations[convIndex].unreadCount = 0;
+    saveConversations(conversations);
+  }
+};
+
+export const createConversation = (participant1: string, participant2: string): Conversation => {
+  const conversations = getStoredConversations();
+  
+  // Check if conversation already exists
+  const existing = conversations.find(c => 
+    c.participants.includes(participant1) && c.participants.includes(participant2)
+  );
+  if (existing) return existing;
+  
+  const newConversation: Conversation = {
+    id: `conv-${Date.now()}`,
+    participants: [participant1, participant2],
+    lastMessage: '',
+    lastMessageAt: new Date().toISOString(),
+    unreadCount: 0,
+  };
+  
+  conversations.push(newConversation);
+  saveConversations(conversations);
+  return newConversation;
+};
+
+export const getParticipantInfo = (participantId: string): { name: string; role: string } => {
+  if (participantId === 'admin') {
+    return { name: 'Administrator', role: 'admin' };
+  }
+  const teacher = mockTeachers.find(t => t.id === participantId);
+  if (teacher) {
+    return { name: teacher.name, role: 'teacher' };
+  }
+  const student = mockStudents.find(s => s.id === participantId);
+  if (student) {
+    return { name: student.name, role: 'student' };
+  }
+  return { name: 'Unknown', role: 'unknown' };
+};
+
+export const getUnreadMessageCount = (userId: string): number => {
+  const conversations = getConversationsForUser(userId);
+  return conversations.reduce((sum, c) => sum + c.unreadCount, 0);
+};
