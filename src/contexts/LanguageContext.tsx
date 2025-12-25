@@ -384,6 +384,11 @@ const translations: Record<Language, Record<string, string>> = {
     'startConversation': 'Neue Konversation starten',
     'selectRecipient': 'Empfänger auswählen',
     'messageSent': 'Nachricht gesendet',
+    'online': 'Online',
+    'offline': 'Offline',
+    'lastSeen': 'Zuletzt gesehen',
+    'isTyping': 'tippt...',
+    'areTyping': 'tippen...',
   },
   en: {
     // Auth
@@ -758,6 +763,11 @@ const translations: Record<Language, Record<string, string>> = {
     'startConversation': 'Start new conversation',
     'selectRecipient': 'Select recipient',
     'messageSent': 'Message sent',
+    'online': 'Online',
+    'offline': 'Offline',
+    'lastSeen': 'Last seen',
+    'isTyping': 'is typing...',
+    'areTyping': 'are typing...',
   }
 };
 

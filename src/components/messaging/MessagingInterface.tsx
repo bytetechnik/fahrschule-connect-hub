@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,7 +9,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Send, Plus, MessageSquare, User, Users, UserCog } from 'lucide-react';
+import { Send, Plus, MessageSquare, User, Users, UserCog, Circle } from 'lucide-react';
 import { 
   getConversationsForUser, 
   getMessagesForConversation, 
@@ -20,7 +20,12 @@ import {
   mockTeachers,
   mockStudents,
   Conversation,
-  Message
+  Message,
+  getUserOnlineStatus,
+  setUserOnline,
+  setTypingStatus,
+  getTypingUsers,
+  formatLastSeen,
 } from '@/lib/mockData';
 import { useToast } from '@/hooks/use-toast';
 
@@ -38,9 +43,21 @@ const MessagingInterface = ({ userRole }: MessagingInterfaceProps) => {
   const [newMessage, setNewMessage] = useState('');
   const [isNewConversationOpen, setIsNewConversationOpen] = useState(false);
   const [selectedRecipient, setSelectedRecipient] = useState('');
+  const [typingUsers, setTypingUsers] = useState<string[]>([]);
+  const [onlineStatuses, setOnlineStatuses] = useState<Map<string, { isOnline: boolean; lastSeen: string }>>(new Map());
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const userId = user?.id || (userRole === 'admin' ? 'admin' : '');
+
+  // Set current user as online and update periodically
+  useEffect(() => {
+    if (userId) {
+      setUserOnline(userId);
+      const interval = setInterval(() => setUserOnline(userId), 30000);
+      return () => clearInterval(interval);
+    }
+  }, [userId]);
 
   useEffect(() => {
     if (userId) {
@@ -48,12 +65,39 @@ const MessagingInterface = ({ userRole }: MessagingInterfaceProps) => {
     }
   }, [userId]);
 
+  // Poll for typing indicators and online status
+  useEffect(() => {
+    const updateStatuses = () => {
+      if (selectedConversation) {
+        const typingNames = getTypingUsers(selectedConversation.id, userId);
+        setTypingUsers(typingNames);
+      }
+      
+      // Update online statuses for all participants
+      const newStatuses = new Map<string, { isOnline: boolean; lastSeen: string }>();
+      conversations.forEach(conv => {
+        conv.participants.forEach(participantId => {
+          if (!newStatuses.has(participantId)) {
+            const status = getUserOnlineStatus(participantId);
+            if (status) {
+              newStatuses.set(participantId, { isOnline: status.isOnline, lastSeen: status.lastSeen });
+            }
+          }
+        });
+      });
+      setOnlineStatuses(newStatuses);
+    };
+
+    updateStatuses();
+    const interval = setInterval(updateStatuses, 2000);
+    return () => clearInterval(interval);
+  }, [selectedConversation, conversations, userId]);
+
   useEffect(() => {
     if (selectedConversation) {
       const msgs = getMessagesForConversation(selectedConversation.id);
       setMessages(msgs);
       markConversationAsRead(selectedConversation.id, userId);
-      // Refresh conversations to update unread count
       loadConversations();
     }
   }, [selectedConversation?.id]);
@@ -71,8 +115,32 @@ const MessagingInterface = ({ userRole }: MessagingInterfaceProps) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleTyping = useCallback(() => {
+    if (!selectedConversation) return;
+    
+    setTypingStatus(selectedConversation.id, userId, true);
+    
+    // Clear existing timeout
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+    
+    // Set new timeout to stop typing indicator after 3 seconds
+    typingTimeoutRef.current = setTimeout(() => {
+      if (selectedConversation) {
+        setTypingStatus(selectedConversation.id, userId, false);
+      }
+    }, 3000);
+  }, [selectedConversation, userId]);
+
   const handleSendMessage = () => {
     if (!newMessage.trim() || !selectedConversation) return;
+
+    // Clear typing indicator
+    setTypingStatus(selectedConversation.id, userId, false);
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
 
     const senderName = user?.name || 'Admin';
     sendMessage(selectedConversation.id, userId, senderName, newMessage.trim());
@@ -86,6 +154,14 @@ const MessagingInterface = ({ userRole }: MessagingInterfaceProps) => {
       title: t('success'),
       description: t('messageSent'),
     });
+  };
+
+  const getOtherParticipantId = (conversation: Conversation): string | undefined => {
+    return conversation.participants.find(p => p !== userId);
+  };
+
+  const getOnlineStatusForParticipant = (participantId: string) => {
+    return onlineStatuses.get(participantId);
   };
 
   const handleCreateConversation = () => {
@@ -207,6 +283,9 @@ const MessagingInterface = ({ userRole }: MessagingInterfaceProps) => {
               <div className="space-y-1 p-2">
                 {conversations.map((conv) => {
                   const otherParticipant = getOtherParticipant(conv);
+                  const otherParticipantId = getOtherParticipantId(conv);
+                  const status = otherParticipantId ? getOnlineStatusForParticipant(otherParticipantId) : null;
+                  const isOnline = status?.isOnline || false;
                   const isSelected = selectedConversation?.id === conv.id;
                   
                   return (
@@ -218,11 +297,18 @@ const MessagingInterface = ({ userRole }: MessagingInterfaceProps) => {
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <Avatar className="h-10 w-10">
-                          <AvatarFallback className="bg-primary/10 text-primary">
-                            {otherParticipant?.name.charAt(0) || '?'}
-                          </AvatarFallback>
-                        </Avatar>
+                        <div className="relative">
+                          <Avatar className="h-10 w-10">
+                            <AvatarFallback className="bg-primary/10 text-primary">
+                              {otherParticipant?.name.charAt(0) || '?'}
+                            </AvatarFallback>
+                          </Avatar>
+                          <Circle 
+                            className={`absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 ${
+                              isOnline ? 'text-green-500 fill-green-500' : 'text-muted-foreground fill-muted-foreground'
+                            }`}
+                          />
+                        </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between">
                             <p className="font-medium truncate">{otherParticipant?.name || 'Unknown'}</p>
@@ -251,14 +337,41 @@ const MessagingInterface = ({ userRole }: MessagingInterfaceProps) => {
           <>
             <CardHeader className="pb-3 border-b">
               <div className="flex items-center gap-3">
-                <Avatar>
-                  <AvatarFallback className="bg-primary/10 text-primary">
-                    {getOtherParticipant(selectedConversation)?.name.charAt(0) || '?'}
-                  </AvatarFallback>
-                </Avatar>
+                <div className="relative">
+                  <Avatar>
+                    <AvatarFallback className="bg-primary/10 text-primary">
+                      {getOtherParticipant(selectedConversation)?.name.charAt(0) || '?'}
+                    </AvatarFallback>
+                  </Avatar>
+                  {(() => {
+                    const otherId = getOtherParticipantId(selectedConversation);
+                    const status = otherId ? getOnlineStatusForParticipant(otherId) : null;
+                    return (
+                      <Circle 
+                        className={`absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 ${
+                          status?.isOnline ? 'text-green-500 fill-green-500' : 'text-muted-foreground fill-muted-foreground'
+                        }`}
+                      />
+                    );
+                  })()}
+                </div>
                 <div>
                   <CardTitle className="text-base">{getOtherParticipant(selectedConversation)?.name}</CardTitle>
-                  <p className="text-sm text-muted-foreground capitalize">{getOtherParticipant(selectedConversation)?.role}</p>
+                  {(() => {
+                    const otherId = getOtherParticipantId(selectedConversation);
+                    const status = otherId ? getOnlineStatusForParticipant(otherId) : null;
+                    if (status?.isOnline) {
+                      return <p className="text-sm text-green-600">{t('online')}</p>;
+                    }
+                    if (status?.lastSeen) {
+                      return (
+                        <p className="text-sm text-muted-foreground">
+                          {t('lastSeen')} {formatLastSeen(status.lastSeen, language)}
+                        </p>
+                      );
+                    }
+                    return <p className="text-sm text-muted-foreground capitalize">{getOtherParticipant(selectedConversation)?.role}</p>;
+                  })()}
                 </div>
               </div>
             </CardHeader>
@@ -291,12 +404,25 @@ const MessagingInterface = ({ userRole }: MessagingInterfaceProps) => {
                 </div>
               </ScrollArea>
               
+              {/* Typing Indicator */}
+              {typingUsers.length > 0 && (
+                <div className="px-4 py-2 text-sm text-muted-foreground italic animate-pulse">
+                  {typingUsers.length === 1 
+                    ? `${typingUsers[0]} ${t('isTyping')}`
+                    : `${typingUsers.join(', ')} ${t('areTyping')}`
+                  }
+                </div>
+              )}
+              
               {/* Message Input */}
               <div className="p-4 border-t">
                 <div className="flex gap-2">
                   <Input
                     value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
+                    onChange={(e) => {
+                      setNewMessage(e.target.value);
+                      handleTyping();
+                    }}
                     placeholder={t('typeMessage')}
                     onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                     className="flex-1"
