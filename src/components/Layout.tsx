@@ -15,7 +15,8 @@ import {
   CalendarDays,
   ShoppingBag,
   Menu,
-  CarFront
+  CarFront,
+  MessageSquare
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import logo from '@/assets/bt_logo.png';
@@ -47,6 +48,7 @@ export const Layout = ({ children }: LayoutProps) => {
           { path: `${baseRoute}/calendar`, icon: CalendarDays, label: t('calendar') },
           { path: `${baseRoute}/payments`, icon: CreditCard, label: t('payments') },
           { path: `${baseRoute}/shop`, icon: ShoppingBag, label: t('shop') },
+          { path: `${baseRoute}/messages`, icon: MessageSquare, label: t('messages') },
         ];
       case 'teacher':
         return [
@@ -55,6 +57,8 @@ export const Layout = ({ children }: LayoutProps) => {
           { path: `${baseRoute}/practical-lessons`, icon: CarFront, label: t('practicalLessons') },
           { path: `${baseRoute}/calendar`, icon: CalendarDays, label: t('calendar') },
           { path: `${baseRoute}/appointments`, icon: Calendar, label: t('appointments') },
+          { path: `${baseRoute}/payments`, icon: CreditCard, label: t('payments') },
+          { path: `${baseRoute}/messages`, icon: MessageSquare, label: t('messages') },
         ];
       case 'student':
         return [
@@ -65,6 +69,7 @@ export const Layout = ({ children }: LayoutProps) => {
           { path: `${baseRoute}/appointments`, icon: Calendar, label: t('appointments') },
           { path: `${baseRoute}/payments`, icon: CreditCard, label: t('payments') },
           { path: `${baseRoute}/shop`, icon: ShoppingBag, label: t('shop') },
+          { path: `${baseRoute}/messages`, icon: MessageSquare, label: t('messages') },
         ];
       default:
         return [];
