@@ -1855,3 +1855,154 @@ export const getUnreadMessageCount = (userId: string): number => {
   const conversations = getConversationsForUser(userId);
   return conversations.reduce((sum, c) => sum + c.unreadCount, 0);
 };
+
+// Online Status System
+const ONLINE_STATUS_STORAGE_KEY = 'fahrschule_online_status';
+const TYPING_STATUS_STORAGE_KEY = 'fahrschule_typing_status';
+
+export interface OnlineStatus {
+  userId: string;
+  isOnline: boolean;
+  lastSeen: string;
+}
+
+export interface TypingStatus {
+  conversationId: string;
+  userId: string;
+  isTyping: boolean;
+  timestamp: string;
+}
+
+// Simulated online users (in a real app, this would come from the server)
+const getStoredOnlineStatus = (): OnlineStatus[] => {
+  const stored = localStorage.getItem(ONLINE_STATUS_STORAGE_KEY);
+  if (stored) {
+    return JSON.parse(stored);
+  }
+  // Initialize with some mock online statuses
+  const initialStatus: OnlineStatus[] = [
+    { userId: 'admin', isOnline: true, lastSeen: new Date().toISOString() },
+    { userId: 'teacher-1', isOnline: true, lastSeen: new Date().toISOString() },
+    { userId: 'teacher-2', isOnline: false, lastSeen: new Date(Date.now() - 30 * 60 * 1000).toISOString() },
+    { userId: 'teacher-3', isOnline: false, lastSeen: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() },
+    { userId: 'student-1', isOnline: true, lastSeen: new Date().toISOString() },
+    { userId: 'student-2', isOnline: false, lastSeen: new Date(Date.now() - 15 * 60 * 1000).toISOString() },
+    { userId: 'student-3', isOnline: true, lastSeen: new Date().toISOString() },
+    { userId: 'student-4', isOnline: false, lastSeen: new Date(Date.now() - 60 * 60 * 1000).toISOString() },
+    { userId: 'student-5', isOnline: false, lastSeen: new Date(Date.now() - 45 * 60 * 1000).toISOString() },
+    { userId: 'student-6', isOnline: true, lastSeen: new Date().toISOString() },
+  ];
+  localStorage.setItem(ONLINE_STATUS_STORAGE_KEY, JSON.stringify(initialStatus));
+  return initialStatus;
+};
+
+const saveOnlineStatus = (statuses: OnlineStatus[]) => {
+  localStorage.setItem(ONLINE_STATUS_STORAGE_KEY, JSON.stringify(statuses));
+};
+
+export const getUserOnlineStatus = (userId: string): OnlineStatus | null => {
+  const statuses = getStoredOnlineStatus();
+  return statuses.find(s => s.userId === userId) || null;
+};
+
+export const setUserOnline = (userId: string) => {
+  const statuses = getStoredOnlineStatus();
+  const index = statuses.findIndex(s => s.userId === userId);
+  const newStatus: OnlineStatus = {
+    userId,
+    isOnline: true,
+    lastSeen: new Date().toISOString(),
+  };
+  
+  if (index !== -1) {
+    statuses[index] = newStatus;
+  } else {
+    statuses.push(newStatus);
+  }
+  saveOnlineStatus(statuses);
+};
+
+export const setUserOffline = (userId: string) => {
+  const statuses = getStoredOnlineStatus();
+  const index = statuses.findIndex(s => s.userId === userId);
+  
+  if (index !== -1) {
+    statuses[index].isOnline = false;
+    statuses[index].lastSeen = new Date().toISOString();
+    saveOnlineStatus(statuses);
+  }
+};
+
+// Typing indicators
+const getStoredTypingStatus = (): TypingStatus[] => {
+  const stored = localStorage.getItem(TYPING_STATUS_STORAGE_KEY);
+  return stored ? JSON.parse(stored) : [];
+};
+
+const saveTypingStatus = (statuses: TypingStatus[]) => {
+  localStorage.setItem(TYPING_STATUS_STORAGE_KEY, JSON.stringify(statuses));
+};
+
+export const setTypingStatus = (conversationId: string, userId: string, isTyping: boolean) => {
+  let statuses = getStoredTypingStatus();
+  
+  // Remove old typing status for this user in this conversation
+  statuses = statuses.filter(s => !(s.conversationId === conversationId && s.userId === userId));
+  
+  if (isTyping) {
+    statuses.push({
+      conversationId,
+      userId,
+      isTyping: true,
+      timestamp: new Date().toISOString(),
+    });
+  }
+  
+  // Clean up old typing statuses (older than 5 seconds)
+  const fiveSecondsAgo = Date.now() - 5000;
+  statuses = statuses.filter(s => new Date(s.timestamp).getTime() > fiveSecondsAgo);
+  
+  saveTypingStatus(statuses);
+};
+
+export const getTypingUsers = (conversationId: string, excludeUserId: string): string[] => {
+  const statuses = getStoredTypingStatus();
+  const fiveSecondsAgo = Date.now() - 5000;
+  
+  return statuses
+    .filter(s => 
+      s.conversationId === conversationId && 
+      s.userId !== excludeUserId &&
+      s.isTyping &&
+      new Date(s.timestamp).getTime() > fiveSecondsAgo
+    )
+    .map(s => {
+      const info = getParticipantInfo(s.userId);
+      return info.name;
+    });
+};
+
+export const formatLastSeen = (lastSeen: string, language: 'de' | 'en'): string => {
+  const date = new Date(lastSeen);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMins / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffMins < 1) {
+    return language === 'de' ? 'Gerade eben' : 'Just now';
+  } else if (diffMins < 60) {
+    return language === 'de' 
+      ? `vor ${diffMins} ${diffMins === 1 ? 'Minute' : 'Minuten'}`
+      : `${diffMins} ${diffMins === 1 ? 'minute' : 'minutes'} ago`;
+  } else if (diffHours < 24) {
+    return language === 'de'
+      ? `vor ${diffHours} ${diffHours === 1 ? 'Stunde' : 'Stunden'}`
+      : `${diffHours} ${diffHours === 1 ? 'hour' : 'hours'} ago`;
+  } else {
+    return language === 'de'
+      ? `vor ${diffDays} ${diffDays === 1 ? 'Tag' : 'Tagen'}`
+      : `${diffDays} ${diffDays === 1 ? 'day' : 'days'} ago`;
+  }
+};
