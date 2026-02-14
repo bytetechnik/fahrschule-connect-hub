@@ -77,6 +77,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = () => {
     setUser(null);
     localStorage.removeItem('drivingSchoolUser');
+    sessionStorage.removeItem('fahrschule_tutorial_prompt_shown');
   };
 
   return (

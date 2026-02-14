@@ -25,6 +25,8 @@ import { Link, useLocation } from 'react-router-dom';
 import logo from '@/assets/bt_logo.png';
 import { APP_NAME } from '@/constants';
 import { getUnreadMessageCount } from '@/lib/mockData';
+import { TutorialPrompt } from './tutorial/TutorialPrompt';
+import { TutorialOverlay } from './tutorial/TutorialOverlay';
 
 interface LayoutProps {
   children: ReactNode;
@@ -134,6 +136,8 @@ export const Layout = ({ children }: LayoutProps) => {
 
   return (
     <div className="min-h-screen bg-background">
+      <TutorialPrompt />
+      <TutorialOverlay />
       <header className="border-b bg-card sticky top-0 z-50">
         <div className="container mx-auto px-4 py-3 md:py-4">
           <div className="flex items-center justify-between gap-2">
@@ -152,15 +156,16 @@ export const Layout = ({ children }: LayoutProps) => {
                 </SheetContent>
               </Sheet>
 
-              <img src={logo} alt="ByteTechnik Fahrschule Logo" className="h-8 w-8 md:h-10 md:w-10 object-contain" />
-              <div className="min-w-0">
-                <h1 className="text-lg md:text-2xl font-bold text-foreground truncate">{APP_NAME}</h1>
-                <p className="text-xs md:text-sm text-muted-foreground truncate">{user.name} - {t(user.role)}</p>
+              <div className="flex items-center gap-2 md:gap-3 min-w-0" data-tutorial="header-brand">
+                <img src={logo} alt="ByteTechnik Fahrschule Logo" className="h-8 w-8 md:h-10 md:w-10 object-contain shrink-0" />
+                <div className="min-w-0">
+                  <h1 className="text-lg md:text-2xl font-bold text-foreground truncate">{APP_NAME}</h1>
+                  <p className="text-xs md:text-sm text-muted-foreground truncate">{user.name} - {t(user.role)}</p>
+                </div>
               </div>
             </div>
             <div className="flex items-center gap-2 md:gap-4 shrink-0">
-              {/* Notification Bell with Badge */}
-              <Link to={`/${user.role}/messages`} className="relative">
+              <Link to={`/${user.role}/messages`} className="relative" data-tutorial="header-messages">
                 <Button variant="ghost" size="icon" className="relative">
                   <Bell className="h-5 w-5" />
                   {unreadCount > 0 && (
@@ -173,8 +178,10 @@ export const Layout = ({ children }: LayoutProps) => {
                   )}
                 </Button>
               </Link>
-              <LanguageToggle />
-              <Button variant="outline" size="sm" onClick={logout} className="gap-2">
+              <div data-tutorial="header-language">
+                <LanguageToggle />
+              </div>
+              <Button variant="outline" size="sm" onClick={logout} className="gap-2" data-tutorial="header-logout">
                 <LogOut className="h-4 w-4" />
                 <span className="hidden sm:inline">{t('logout')}</span>
               </Button>
@@ -185,12 +192,11 @@ export const Layout = ({ children }: LayoutProps) => {
 
       <div className="container mx-auto px-4 py-6">
         <div className="flex gap-6">
-          {/* Desktop Sidebar */}
-          <aside className="hidden lg:block w-64 shrink-0">
+          <aside className="hidden lg:block w-64 shrink-0" data-tutorial="sidebar">
             <NavItems />
           </aside>
 
-          <main className="flex-1 min-w-0">
+          <main className="flex-1 min-w-0" data-tutorial="main-content">
             {children}
           </main>
         </div>
