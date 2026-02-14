@@ -188,6 +188,14 @@ const initialAppointments: Appointment[] = [
     createdAt: '2025-01-30T10:00:00Z',
     updatedAt: '2025-02-12T14:30:00Z'
   },
+  // More completed - Oct 2024, Nov 2024, Dec 2024 for month-wise report
+  { id: 'apt-22', teacherId: 'teacher-1', studentId: 'student-1', date: '2024-10-05', time: '10:00', duration: 90, ticketsUsed: 2, status: 'completed', createdAt: '2024-09-28T10:00:00Z', updatedAt: '2024-10-05T12:00:00Z' },
+  { id: 'apt-23', teacherId: 'teacher-2', studentId: 'student-3', date: '2024-10-12', time: '11:00', duration: 45, ticketsUsed: 1, status: 'completed', createdAt: '2024-10-01T10:00:00Z', updatedAt: '2024-10-12T12:00:00Z' },
+  { id: 'apt-24', teacherId: 'teacher-1', studentId: 'student-2', date: '2024-11-08', time: '14:00', duration: 90, ticketsUsed: 2, status: 'completed', createdAt: '2024-11-01T10:00:00Z', updatedAt: '2024-11-08T16:00:00Z' },
+  { id: 'apt-25', teacherId: 'teacher-3', studentId: 'student-5', date: '2024-11-15', time: '09:00', duration: 45, ticketsUsed: 1, status: 'completed', createdAt: '2024-11-10T09:00:00Z', updatedAt: '2024-11-15T10:00:00Z' },
+  { id: 'apt-26', teacherId: 'teacher-2', studentId: 'student-11', date: '2024-12-03', time: '08:00', duration: 90, ticketsUsed: 2, status: 'completed', createdAt: '2024-11-28T08:00:00Z', updatedAt: '2024-12-03T10:00:00Z' },
+  { id: 'apt-27', teacherId: 'teacher-1', studentId: 'student-1', date: '2024-12-10', time: '10:00', duration: 45, ticketsUsed: 1, status: 'completed', createdAt: '2024-12-05T10:00:00Z', updatedAt: '2024-12-10T11:00:00Z' },
+  { id: 'apt-28', teacherId: 'teacher-2', studentId: 'student-14', date: '2024-12-18', time: '15:00', duration: 90, ticketsUsed: 2, status: 'completed', createdAt: '2024-12-12T15:00:00Z', updatedAt: '2024-12-18T17:00:00Z' },
   // Cancelled appointments
   { 
     id: 'apt-17', 

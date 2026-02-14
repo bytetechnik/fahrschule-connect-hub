@@ -177,6 +177,15 @@ export {
   type UpcomingExam,
 } from './analytics';
 
+// Re-export from classReports
+export {
+  getStudentClassReports,
+  getTeacherClassReports,
+  type StudentClassReport,
+  type TeacherClassReport,
+  type MonthKey,
+} from './classReports';
+
 // Re-export validation functions
 export {
   validateAllData,

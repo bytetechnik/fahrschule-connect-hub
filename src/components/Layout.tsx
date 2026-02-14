@@ -18,7 +18,8 @@ import {
   Menu,
   CarFront,
   MessageSquare,
-  Bell
+  Bell,
+  FileText
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import logo from '@/assets/bt_logo.png';
@@ -80,6 +81,7 @@ export const Layout = ({ children }: LayoutProps) => {
           { path: `${baseRoute}/calendar`, icon: CalendarDays, label: t('calendar') },
           { path: `${baseRoute}/payments`, icon: CreditCard, label: t('payments') },
           { path: `${baseRoute}/shop`, icon: ShoppingBag, label: t('shop') },
+          { path: `${baseRoute}/class-reports`, icon: FileText, label: t('classReports') },
           { path: `${baseRoute}/messages`, icon: MessageSquare, label: t('messages') },
         ];
       case 'teacher':

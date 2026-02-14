@@ -20,6 +20,7 @@ import AdminPayments from "./pages/admin/Payments";
 import AdminShop from "./pages/admin/Shop";
 import AdminPracticalLessons from "./pages/admin/PracticalLessons";
 import AdminMessages from "./pages/admin/Messages";
+import AdminClassReports from "./pages/admin/ClassReports";
 import TeacherDashboard from "./pages/teacher/Dashboard";
 import TeacherStudents from "./pages/teacher/Students";
 import TeacherCalendar from "./pages/teacher/Calendar";
@@ -63,6 +64,7 @@ const App = () => (
               <Route path="/admin/payments" element={<ProtectedRoute allowedRoles={['admin']}><AdminPayments /></ProtectedRoute>} />
               <Route path="/admin/shop" element={<ProtectedRoute allowedRoles={['admin']}><AdminShop /></ProtectedRoute>} />
               <Route path="/admin/practical-lessons" element={<ProtectedRoute allowedRoles={['admin']}><AdminPracticalLessons /></ProtectedRoute>} />
+              <Route path="/admin/class-reports" element={<ProtectedRoute allowedRoles={['admin']}><AdminClassReports /></ProtectedRoute>} />
               <Route path="/admin/messages" element={<ProtectedRoute allowedRoles={['admin']}><AdminMessages /></ProtectedRoute>} />
               
               <Route path="/teacher/dashboard" element={<ProtectedRoute allowedRoles={['teacher']}><TeacherDashboard /></ProtectedRoute>} />
